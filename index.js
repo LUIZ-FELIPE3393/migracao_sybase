@@ -8,27 +8,21 @@ const port = 8080;
 app.get("/", (req, res) => {
     const pyPrc = spawn('python', ['./api/sybase.py', 'q_count', 'cliente', './api/resultset.json']);
 
-    const result = pyPrc.stdout?.toString()?.trim();
-    const error = pyPrc.stderr?.toString()?.trim();
-
-    console.log(result);
-
-    const status = result === 'OK';
-
-    if (status) {
+    pyPrc.stdout.on('data', (result) => {
         try {
-            const buffer = readFile('/api/resultset.json');
-            const resultParsed = JSON.parse(buffer?.toString());
-            console.log("19 - ", resultParsed);
-            res.send(resultParsed.toString());
+            readFile('./api/resultset.json', (err, data) => {
+                if(err) {
+                    console.error(err);
+                    throw err;
+                }
+                const resultParsed = JSON.parse(data?.toString());
+                res.send(resultParsed);
+            });
+            
         } catch (error) {
             console.error(error);
         }
-        
-    } else {
-        console.error(error);
-        res.send("Erro");
-    }
+    })
 });
 
 app.listen(port, () => console.log(`O server foi aberto na porta ${port}. Acesse em http://localhost:${port}`));
