@@ -19,8 +19,11 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "./index.html"));
 });
 
-app.get("/a", (req, res) => {
-    res.json(JSON.parse('{name: "luiz"}'))
+app.get("/json/:filename", (req, res) => {
+    readFile("./json/" + req.params.filename, (error, data) => {
+        console.log(data)
+        return res.json(JSON.parse(data?.toString()))
+    })
 });
 
 app.get("/sybase-db/:database/:table", (req, res) => {
@@ -36,7 +39,7 @@ app.get("/sybase-db/:database/:table", (req, res) => {
                     throw err;
                 }
                 const resultParsed = JSON.parse(data?.toString());
-                res.send(resultParsed);
+                return res.json(resultParsed);
             });
             
         } catch (error) {
@@ -62,7 +65,7 @@ app.get("/sybase-db/:database", (req, res) => {
                     throw err;
                 }
                 const resultParsed = JSON.parse(data?.toString());
-                res.send(resultParsed);
+                return res.json(resultParsed);
             });
             
         } catch (error) {
