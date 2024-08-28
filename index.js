@@ -6,9 +6,11 @@ const app = express();
 const port = 8080;
 
 app.get("/", (req, res) => {
-    const pyPrc = spawn('python', ['./api/sybase.py', 'q_count', 'cliente', './api/resultset.json']);
+    const pyPrc = spawn('python', ['./api/sybase.py', 'q_databases', 'cliente', './api/resultset.json']);
 
     pyPrc.stdout.on('data', (result) => {
+        console.log(result)
+
         try {
             readFile('./api/resultset.json', (err, data) => {
                 if(err) {
@@ -22,6 +24,10 @@ app.get("/", (req, res) => {
         } catch (error) {
             console.error(error);
         }
+    })
+
+    pyPrc.stderr.on('error', (error) => {
+        console.error(error);
     })
 });
 
