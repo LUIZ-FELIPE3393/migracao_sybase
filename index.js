@@ -11,6 +11,8 @@ app.get("/", (req, res) => {
     const result = pyPrc.stdout?.toString()?.trim();
     const error = pyPrc.stderr?.toString()?.trim();
 
+    console.log(result);
+
     const status = result === 'OK';
 
     if (status) {

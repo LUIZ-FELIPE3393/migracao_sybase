@@ -1,0 +1,35 @@
+[
+    {
+        "clicodigo": 1,
+        "clisexo": "M",
+        "clirendamensal": 2550.00,
+        "clinome": "GANDERSON DOS SANTOS",
+        "clibaicodigo": 1,
+        "clifone": " ",
+        "cliestcodigo": 1,
+        "clidtcadastro": null,
+        "clidtdesativacao": null
+    },
+    {
+        "clicodigo": 2,
+        "clisexo": "M",
+        "clirendamensal": 3910.00,
+        "clinome": "FRANCISCO DOS SANTOS OLIVEIRA",
+        "clibaicodigo": 8,
+        "clifone": " ",
+        "cliestcodigo": 1,
+        "clidtcadastro": null,
+        "clidtdesativacao": null
+    },
+    {
+        "clicodigo": 3,
+        "clisexo": "M",
+        "clirendamensal": 1615.00,
+        "clinome": "CARLOS SOUZA MAGALHAES",
+        "clibaicodigo": 1,
+        "clifone": " ",
+        "cliestcodigo": 1,
+        "clidtcadastro": null,
+        "clidtdesativacao": null
+    }
+]

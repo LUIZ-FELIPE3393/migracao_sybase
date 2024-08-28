@@ -1,6 +1,6 @@
 import pyodbc
 import sys
-import json
+import simplejson as json
 
 user = "sa" 
 passwd = "123456"
@@ -9,20 +9,32 @@ db = "bd2024"
 port = "5000"
 driver="Devart ODBC Driver for ASE"
 
+def convert_rows_to_json(rows, columns):
+    results = []
+    for row in rows:
+        results.append(dict(zip(columns, row)))
+    
+    return results
+    
+
+
 def q_count(table):
     conn = pyodbc.connect(driver=driver, server=host, database=db, port = port, uid=user, pwd=passwd) 
     print(conn)    
     cursor = conn.cursor()  
-    query= f"select count(*) from {table}"
+    query= f"select * from {table} where clicodigo IN (1, 2, 3)"
     cursor.execute(query)
-    row = cursor.fetchall()    
-    print(str(row[0]))
-    #json_result = json.dumps(row)
+    columns = [column[0] for column in cursor.description]
+    rows = cursor.fetchall()    
+    results = convert_rows_to_json(rows, columns)
+    print(results)
+    json_result = json.dumps(results, indent=4)
 
-    #with open(sys.argv[3], "w") as outfile:
-    #    outfile.write(json_result)
-    #print("OK")
+    with open(sys.argv[3], "w") as outfile:
+        outfile.write(json_result)
 
+    print("OK")
+    
     conn.close()
 
 # Match for functions below
