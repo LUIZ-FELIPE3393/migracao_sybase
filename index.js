@@ -24,7 +24,7 @@ app.get("/a", (req, res) => {
 });
 
 app.get("/sybase-db/:database/:table", (req, res) => {
-    const pyPrc = spawn('python', ['./api/sybase.py', 'q_list_tables', [req.params.database, req.params.table], './api/resultset.json']);
+    const pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_list_tables', req.params.database, req.params.table]);
 
     pyPrc.stdout.on('data', (result) => {
         console.log(result)
@@ -50,7 +50,7 @@ app.get("/sybase-db/:database/:table", (req, res) => {
 });
 
 app.get("/sybase-db/:database", (req, res) => {
-    const pyPrc = spawn('python', ['./api/sybase.py', 'q_list_tables', req.params.database, './api/resultset.json']);
+    const pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_list_tables', req.params.database]);
 
     pyPrc.stdout.on('data', (result) => {
         console.log(result)
@@ -76,7 +76,7 @@ app.get("/sybase-db/:database", (req, res) => {
 })
 
 app.get("/sybase-db", async (req, res) => {
-    const pyPrc = spawn('python', ['./api/sybase.py', './api/resultset.json', 'q_databases', '']);
+    const pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_databases', '']);
 
     pyPrc.stdout.on('data', (result) => {
         console.log(result)
