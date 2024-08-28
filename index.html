@@ -23,67 +23,16 @@
     </div>
 
     <!--Section do Sybase-->
-    <div class="row">
-        <div class="col-5" id="idSybase">
-            <h2 style="color: rgb(159, 255, 172); font-weight: bold;">Sybase</h2>
-            <!--Botão de expandir 1-->
-            <p>
-                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#adm1" aria-expanded="false" aria-controls="collapseExample">
-                    Banco de Dados
-                </button>
-            </p>
-            <!--Tabelas do banco-->
-            <div class="collapse" id="adm1">
-                <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something">
-                <label class="form-check-label">Tabela x</label><br>
-                <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something">
-                <label class="form-check-label">Tabela y</label><br>
-                <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something">
-                <label class="form-check-label">Tabela z</label><br>
-            </div>
-        </div>
+    <form class="row" method="post" action="/migrar">
+        
 
         <!--Section do meio-->
-        <div class="col-2" id="idMeio">
-            <button type="button" class="btn btn-success">Migrar</button>
+        <div class="col" id="idSybase">
+            <h2 style="color: rgb(159, 255, 172); font-weight: bold;">Sybase</h2>
         </div>
+        <button type="button" type="submit" class="btn btn-success">Migrar</button>
 
-        <!--Section do MySQL-->
-        <div class="col-5" id="idMysql">
-            <h2 style="color: rgb(116, 190, 255); font-weight: bold;">MySQL</h2>
-            <!--Botão de expandir 2-->
-            <p>
-                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#adm2" aria-expanded="false" aria-controls="collapseExample">
-                    Banco de Dados
-                </button>
-            </p>
-            <!--Tabelas do banco-->
-            <div class="collapse" id="adm2">
-                <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something">
-                <label class="form-check-label">Tabela x</label><br>
-                <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something">
-                <label class="form-check-label">Tabela y</label><br>
-                <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something">
-                <label class="form-check-label">Tabela z</label><br>
-            </div>
-
-            <!--Botão de expandir 3-->
-            <p>
-                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#adm3" aria-expanded="false" aria-controls="collapseExample">
-                    Banco de Dados
-                </button>
-            </p>
-            <!--Tabelas do banco-->
-            <div class="collapse" id="adm3">
-                <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something">
-                <label class="form-check-label">Tabela x</label><br>
-                <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something">
-                <label class="form-check-label">Tabela y</label><br>
-                <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something">
-                <label class="form-check-label">Tabela z</label><br>
-            </div>
-        </div>
-    </div>
+    </form>
     <script src="/js/db.js"></script>
 </body>
 </html>
