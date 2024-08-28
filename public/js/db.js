@@ -1,11 +1,5 @@
 // Listar bancos de dados
-fetch('/sybase-db').then((data) => console.log(data));
+fetch('/sybase-db')
+    .then((data) => data.json())
+    .then((json) => console.log(json));
 
-/*
-fetch('/a')
-    .then((response) => response.json())
-    .then((body) => {
-        console.log(body);
-    }).catch((error) => {
-        console.error('error in execution', error);
-    })*/

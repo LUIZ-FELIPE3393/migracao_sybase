@@ -103,8 +103,8 @@ match sys.argv[2]:
     case 'q_list_tables':
         q_list_tables(sys.argv[3])
     case 'q_list_columns':
-        q_list_columns(sys.argv[3][0], sys.argv[3][1])
+        q_list_columns(sys.argv[3], sys.argv[4])
     case 'q_related_tables':
-        q_related_tables(sys.argv[3][0], sys.argv[3][1])
+        q_related_tables(sys.argv[3], sys.argv[4])
     case 'q_select_all_from_table':
-        q_select_all_from_table(sys.argv[3][0], sys.argv[3][1])
+        q_select_all_from_table(sys.argv[3], sys.argv[4])
