@@ -26,6 +26,43 @@ app.get("/json/:filename", (req, res) => {
     })
 });
 
+app.post("/mysql-db/com-dados/:database/:table", (req, res) => {
+    // Insere tabela sem dados no MySQL
+
+    // Puxa colunas da tabela pro resultset.json
+    let pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_list_columns', req.params.database, req.params.table]);
+    
+    pyPrc.stdout.on('data', (result) => {
+        console.log(result);
+
+        // Insere tabela no banco
+        pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'create_table', req.params.database, req.params.table]);
+
+        pyPrc.stdout.on('data', (result) => {
+            console.log(result);
+
+            // Puxa dados da tabela pro resultset.json
+            pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_select_all_from_table', req.params.database, req.params.table]);
+
+            pyPrc.stdout.on('data', (result) => {
+                console.log(result);
+
+                // Insere dados da tabela no banco
+                pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'insert_data', req.params.database, req.params.table]);
+            })
+        })
+    })
+});
+
+app.post("/mysql-db/sem-dados/:database/:table", (req, res) => {
+    // Insere tabela sem dados no MySQL
+});
+
+app.post("/mysql-db/novo-banco/:database", (req, res) => {
+    // Cria novo banco de dados no MySQL
+    spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'create_schema', req.params.database]);
+});
+
 app.get("/sybase-db/:database/:table", (req, res) => {
     const pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_list_tables', req.params.database, req.params.table]);
 

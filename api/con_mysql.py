@@ -14,6 +14,8 @@ def create_schema( db_name ):
 
     print("OK")
 
+    mydb.close()
+
 def create_table( db_name, table_name ):
     mydb = mysql.connector.connect(
         host="localhost",
@@ -49,6 +51,8 @@ def create_table( db_name, table_name ):
 
     mycursor.execute(f"CREATE TABLE {table_name} ({'%s' % ', '.join(map(str, columns))})")
 
+    mydb.close()
+
 def insert_data( db_name, table_name ):
     mydb = mysql.connector.connect(
         host="localhost",
@@ -63,8 +67,10 @@ def insert_data( db_name, table_name ):
 
     for i in data:
         value_list = list(i.values())
-        print(f"CREATE TABLE {table_name} ({'''%s''' % ', '.join(map(str, value_list))})")
-        
+        mycursor.execute(f"INSERT INTO {table_name} VALUES ({str(value_list).replace('[', '').replace(']', '').replace('None', 'null')});")
+
+    mydb.commit()     
+    mydb.close()
 
 
 # Match for functions below
