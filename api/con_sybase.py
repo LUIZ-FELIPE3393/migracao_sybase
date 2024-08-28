@@ -58,7 +58,7 @@ def q_list_tables(database):
     conn.close()
 
 def q_list_columns (database, table):
-    query= f"EXEC sp_listar_colunas_de_tabela {database} {table}"
+    query= f"EXEC sp_listar_colunas_de_tabela {database}, {table}"
     cursor = create_cursor(query)
 
     columns = [column[0] for column in cursor.description]
@@ -71,7 +71,7 @@ def q_list_columns (database, table):
     conn.close()
 
 def q_related_tables(database, table):
-    query= f"EXEC sp_listar_tabelas_relacionadas {database} {table}"
+    query= f"EXEC sp_listar_tabelas_relacionadas {database}, {table}"
     cursor = create_cursor(query)
 
     columns = [column[0] for column in cursor.description]

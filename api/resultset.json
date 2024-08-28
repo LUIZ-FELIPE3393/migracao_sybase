@@ -1,64 +1,65 @@
 [
     {
-        "name": "bd2024",
-        "dbid": 4,
-        "suid": 1,
-        "status": 0,
-        "version": 1,
-        "logptr": 975,
-        "crdate": "2024-08-28 13:40:34.100000",
-        "dumptrdate": "2024-08-28 13:40:34.623000",
-        "status2": -32768,
-        "audflags": 0,
-        "deftabaud": 0,
-        "defvwaud": 0,
-        "defpraud": 0,
-        "def_remote_type": null,
-        "def_remote_loc": null,
-        "status3": 131072,
-        "status4": 16384,
-        "audflags2": null,
-        "spare": null,
-        "durability": 1,
-        "lobcomp_lvl": 0,
-        "inrowlen": null,
-        "dcompdefaultlevel": 1,
-        "encrkeyid": null,
-        "status5": 0,
-        "imrscache": null,
-        "imrslogptr": null,
-        "imrsloglastptr": null,
-        "versiondbid": 0
+        "name": "clicodigo",
+        "length": 4,
+        "type": 56,
+        "prec": null,
+        "scale": null
     },
     {
-        "name": "pizzaria",
-        "dbid": 5,
-        "suid": 1,
-        "status": 0,
-        "version": 1,
-        "logptr": 975,
-        "crdate": "2024-08-28 13:54:28.100000",
-        "dumptrdate": "2024-08-28 13:54:28.720000",
-        "status2": -32768,
-        "audflags": 0,
-        "deftabaud": 0,
-        "defvwaud": 0,
-        "defpraud": 0,
-        "def_remote_type": null,
-        "def_remote_loc": null,
-        "status3": 131072,
-        "status4": 16384,
-        "audflags2": null,
-        "spare": null,
-        "durability": 1,
-        "lobcomp_lvl": 0,
-        "inrowlen": null,
-        "dcompdefaultlevel": 1,
-        "encrkeyid": null,
-        "status5": 0,
-        "imrscache": null,
-        "imrslogptr": null,
-        "imrsloglastptr": null,
-        "versiondbid": 0
+        "name": "clisexo",
+        "length": 1,
+        "type": 47,
+        "prec": null,
+        "scale": null
+    },
+    {
+        "name": "clirendamensal",
+        "length": 4,
+        "type": 63,
+        "prec": 6,
+        "scale": 2
+    },
+    {
+        "name": "clinome",
+        "length": 60,
+        "type": 39,
+        "prec": null,
+        "scale": null
+    },
+    {
+        "name": "clibaicodigo",
+        "length": 4,
+        "type": 56,
+        "prec": null,
+        "scale": null
+    },
+    {
+        "name": "clifone",
+        "length": 10,
+        "type": 39,
+        "prec": null,
+        "scale": null
+    },
+    {
+        "name": "cliestcodigo",
+        "length": 4,
+        "type": 56,
+        "prec": null,
+        "scale": null
+    },
+    {
+        "name": "clidtcadastro",
+        "length": 4,
+        "type": 123,
+        "prec": null,
+        "scale": null
+    },
+    {
+        "name": "clidtdesativacao",
+        "length": 4,
+        "type": 123,
+        "prec": null,
+        "scale": null
     }
 ]

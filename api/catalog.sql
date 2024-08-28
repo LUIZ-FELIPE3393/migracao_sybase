@@ -1,4 +1,4 @@
-USE bd2024;
+USE master;
 
 sp_fkeys sysconstraints;
 
@@ -29,7 +29,7 @@ AS
 BEGIN
         DECLARE @sql NVARCHAR(4000)
         SET @sql = 
-        'SELECT name, length 
+        'SELECT name, length, type, prec, scale
         FROM '+@nome_bd+'.dbo.syscolumns
         WHERE id = (SELECT id FROM 
                         '+@nome_bd+'.dbo.sysobjects 
@@ -40,8 +40,7 @@ END;
 
 EXEC sp_listar_colunas_de_tabela 
         @nome_bd = 'pizzaria', 
-        @nome_tab = 'pizza';
-        
+        @nome_tab = 'pizza';   
 
 CREATE OR REPLACE PROCEDURE sp_listar_tabelas_relacionadas
         @nome_bd SYSNAME,
