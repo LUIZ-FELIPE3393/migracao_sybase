@@ -1,0 +1,31 @@
+{
+  "name": "migracao_sybase",
+  "version": "1.0.0",
+  "description": "Migracao entre Sybase e MySQL",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LUIZ-FELIPE3393/migracao_sybase.git"
+  },
+  "keywords": [
+    "sybase",
+    "python",
+    "nodejs"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LUIZ-FELIPE3393/migracao_sybase/issues"
+  },
+  "homepage": "https://github.com/LUIZ-FELIPE3393/migracao_sybase#readme",
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
