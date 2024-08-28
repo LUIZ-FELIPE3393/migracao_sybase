@@ -1,65 +1,779 @@
 [
     {
-        "name": "clicodigo",
-        "length": 4,
-        "type": 56,
-        "prec": null,
-        "scale": null
+        "vencodigo": 1,
+        "vendata": "0107-01-03",
+        "venfilcodigo": 1,
+        "venclicodigo": 10,
+        "venfuncodigo": 9
     },
     {
-        "name": "clisexo",
-        "length": 1,
-        "type": 47,
-        "prec": null,
-        "scale": null
+        "vencodigo": 2,
+        "vendata": "0107-01-03",
+        "venfilcodigo": 2,
+        "venclicodigo": 1,
+        "venfuncodigo": 2
     },
     {
-        "name": "clirendamensal",
-        "length": 4,
-        "type": 63,
-        "prec": 6,
-        "scale": 2
+        "vencodigo": 3,
+        "vendata": "0107-01-03",
+        "venfilcodigo": 3,
+        "venclicodigo": 30,
+        "venfuncodigo": 3
     },
     {
-        "name": "clinome",
-        "length": 60,
-        "type": 39,
-        "prec": null,
-        "scale": null
+        "vencodigo": 4,
+        "vendata": "0107-01-03",
+        "venfilcodigo": 2,
+        "venclicodigo": 5,
+        "venfuncodigo": 3
     },
     {
-        "name": "clibaicodigo",
-        "length": 4,
-        "type": 56,
-        "prec": null,
-        "scale": null
+        "vencodigo": 5,
+        "vendata": "0107-01-03",
+        "venfilcodigo": 3,
+        "venclicodigo": 6,
+        "venfuncodigo": 4
     },
     {
-        "name": "clifone",
-        "length": 10,
-        "type": 39,
-        "prec": null,
-        "scale": null
+        "vencodigo": 6,
+        "vendata": "0107-01-03",
+        "venfilcodigo": 2,
+        "venclicodigo": 2,
+        "venfuncodigo": 8
     },
     {
-        "name": "cliestcodigo",
-        "length": 4,
-        "type": 56,
-        "prec": null,
-        "scale": null
+        "vencodigo": 7,
+        "vendata": "0107-01-03",
+        "venfilcodigo": 3,
+        "venclicodigo": 8,
+        "venfuncodigo": 9
     },
     {
-        "name": "clidtcadastro",
-        "length": 4,
-        "type": 123,
-        "prec": null,
-        "scale": null
+        "vencodigo": 8,
+        "vendata": "0107-01-03",
+        "venfilcodigo": 2,
+        "venclicodigo": 2,
+        "venfuncodigo": 6
     },
     {
-        "name": "clidtdesativacao",
-        "length": 4,
-        "type": 123,
-        "prec": null,
-        "scale": null
+        "vencodigo": 9,
+        "vendata": "0107-01-03",
+        "venfilcodigo": 2,
+        "venclicodigo": 90,
+        "venfuncodigo": 2
+    },
+    {
+        "vencodigo": 10,
+        "vendata": "0107-01-03",
+        "venfilcodigo": 2,
+        "venclicodigo": 12,
+        "venfuncodigo": 7
+    },
+    {
+        "vencodigo": 11,
+        "vendata": "0107-01-03",
+        "venfilcodigo": 3,
+        "venclicodigo": 57,
+        "venfuncodigo": 9
+    },
+    {
+        "vencodigo": 12,
+        "vendata": "0107-01-03",
+        "venfilcodigo": 3,
+        "venclicodigo": 39,
+        "venfuncodigo": 6
+    },
+    {
+        "vencodigo": 13,
+        "vendata": "0107-01-03",
+        "venfilcodigo": 1,
+        "venclicodigo": 36,
+        "venfuncodigo": 4
+    },
+    {
+        "vencodigo": 14,
+        "vendata": "0107-01-03",
+        "venfilcodigo": 3,
+        "venclicodigo": 28,
+        "venfuncodigo": 5
+    },
+    {
+        "vencodigo": 15,
+        "vendata": "0107-01-03",
+        "venfilcodigo": 1,
+        "venclicodigo": 22,
+        "venfuncodigo": 7
+    },
+    {
+        "vencodigo": 16,
+        "vendata": "0107-01-04",
+        "venfilcodigo": 2,
+        "venclicodigo": 11,
+        "venfuncodigo": 3
+    },
+    {
+        "vencodigo": 17,
+        "vendata": "0107-01-04",
+        "venfilcodigo": 1,
+        "venclicodigo": 44,
+        "venfuncodigo": 9
+    },
+    {
+        "vencodigo": 18,
+        "vendata": "0107-01-04",
+        "venfilcodigo": 2,
+        "venclicodigo": 55,
+        "venfuncodigo": 3
+    },
+    {
+        "vencodigo": 19,
+        "vendata": "0107-01-04",
+        "venfilcodigo": 2,
+        "venclicodigo": 66,
+        "venfuncodigo": 2
+    },
+    {
+        "vencodigo": 20,
+        "vendata": "0107-01-04",
+        "venfilcodigo": 3,
+        "venclicodigo": 77,
+        "venfuncodigo": 4
+    },
+    {
+        "vencodigo": 21,
+        "vendata": "0107-01-04",
+        "venfilcodigo": 3,
+        "venclicodigo": 88,
+        "venfuncodigo": 8
+    },
+    {
+        "vencodigo": 22,
+        "vendata": "0107-01-04",
+        "venfilcodigo": 3,
+        "venclicodigo": 99,
+        "venfuncodigo": 2
+    },
+    {
+        "vencodigo": 23,
+        "vendata": "0107-01-04",
+        "venfilcodigo": 1,
+        "venclicodigo": 26,
+        "venfuncodigo": 7
+    },
+    {
+        "vencodigo": 24,
+        "vendata": "0107-01-04",
+        "venfilcodigo": 1,
+        "venclicodigo": 29,
+        "venfuncodigo": 3
+    },
+    {
+        "vencodigo": 25,
+        "vendata": "0107-01-04",
+        "venfilcodigo": 2,
+        "venclicodigo": 35,
+        "venfuncodigo": 4
+    },
+    {
+        "vencodigo": 26,
+        "vendata": "0107-01-04",
+        "venfilcodigo": 2,
+        "venclicodigo": 42,
+        "venfuncodigo": 16
+    },
+    {
+        "vencodigo": 27,
+        "vendata": "0107-01-04",
+        "venfilcodigo": 1,
+        "venclicodigo": 47,
+        "venfuncodigo": 13
+    },
+    {
+        "vencodigo": 28,
+        "vendata": "0107-01-04",
+        "venfilcodigo": 3,
+        "venclicodigo": 52,
+        "venfuncodigo": 19
+    },
+    {
+        "vencodigo": 29,
+        "vendata": "0107-01-05",
+        "venfilcodigo": 1,
+        "venclicodigo": 59,
+        "venfuncodigo": 12
+    },
+    {
+        "vencodigo": 30,
+        "vendata": "0107-01-05",
+        "venfilcodigo": 2,
+        "venclicodigo": 119,
+        "venfuncodigo": 12
+    },
+    {
+        "vencodigo": 31,
+        "vendata": "0107-01-05",
+        "venfilcodigo": 2,
+        "venclicodigo": 112,
+        "venfuncodigo": 17
+    },
+    {
+        "vencodigo": 32,
+        "vendata": "0107-01-05",
+        "venfilcodigo": 1,
+        "venclicodigo": 104,
+        "venfuncodigo": 11
+    },
+    {
+        "vencodigo": 33,
+        "vendata": "0107-01-05",
+        "venfilcodigo": 3,
+        "venclicodigo": 109,
+        "venfuncodigo": 10
+    },
+    {
+        "vencodigo": 34,
+        "vendata": "0107-01-05",
+        "venfilcodigo": 1,
+        "venclicodigo": 125,
+        "venfuncodigo": 16
+    },
+    {
+        "vencodigo": 35,
+        "vendata": "0107-01-05",
+        "venfilcodigo": 3,
+        "venclicodigo": 129,
+        "venfuncodigo": 16
+    },
+    {
+        "vencodigo": 36,
+        "vendata": "0107-01-05",
+        "venfilcodigo": 2,
+        "venclicodigo": 162,
+        "venfuncodigo": 12
+    },
+    {
+        "vencodigo": 37,
+        "vendata": "0107-01-05",
+        "venfilcodigo": 1,
+        "venclicodigo": 128,
+        "venfuncodigo": 18
+    },
+    {
+        "vencodigo": 38,
+        "vendata": "0107-01-05",
+        "venfilcodigo": 3,
+        "venclicodigo": 137,
+        "venfuncodigo": 19
+    },
+    {
+        "vencodigo": 39,
+        "vendata": "0107-01-05",
+        "venfilcodigo": 1,
+        "venclicodigo": 143,
+        "venfuncodigo": 16
+    },
+    {
+        "vencodigo": 40,
+        "vendata": "0107-01-05",
+        "venfilcodigo": 2,
+        "venclicodigo": 169,
+        "venfuncodigo": 10
+    },
+    {
+        "vencodigo": 41,
+        "vendata": "0107-01-06",
+        "venfilcodigo": 2,
+        "venclicodigo": 152,
+        "venfuncodigo": 11
+    },
+    {
+        "vencodigo": 42,
+        "vendata": "0107-01-06",
+        "venfilcodigo": 1,
+        "venclicodigo": 162,
+        "venfuncodigo": 12
+    },
+    {
+        "vencodigo": 43,
+        "vendata": "0107-01-06",
+        "venfilcodigo": 1,
+        "venclicodigo": 127,
+        "venfuncodigo": 10
+    },
+    {
+        "vencodigo": 44,
+        "vendata": "0107-01-06",
+        "venfilcodigo": 2,
+        "venclicodigo": 129,
+        "venfuncodigo": 14
+    },
+    {
+        "vencodigo": 45,
+        "vendata": "0107-01-06",
+        "venfilcodigo": 1,
+        "venclicodigo": 168,
+        "venfuncodigo": 11
+    },
+    {
+        "vencodigo": 46,
+        "vendata": "0107-01-06",
+        "venfilcodigo": 3,
+        "venclicodigo": 179,
+        "venfuncodigo": 12
+    },
+    {
+        "vencodigo": 47,
+        "vendata": "0107-01-06",
+        "venfilcodigo": 3,
+        "venclicodigo": 181,
+        "venfuncodigo": 16
+    },
+    {
+        "vencodigo": 48,
+        "vendata": "0107-01-06",
+        "venfilcodigo": 1,
+        "venclicodigo": 171,
+        "venfuncodigo": 13
+    },
+    {
+        "vencodigo": 49,
+        "vendata": "0107-01-06",
+        "venfilcodigo": 2,
+        "venclicodigo": 128,
+        "venfuncodigo": 13
+    },
+    {
+        "vencodigo": 50,
+        "vendata": "0107-01-06",
+        "venfilcodigo": 1,
+        "venclicodigo": 171,
+        "venfuncodigo": 18
+    },
+    {
+        "vencodigo": 51,
+        "vendata": "0107-01-06",
+        "venfilcodigo": 3,
+        "venclicodigo": 161,
+        "venfuncodigo": 21
+    },
+    {
+        "vencodigo": 52,
+        "vendata": "0107-01-06",
+        "venfilcodigo": 2,
+        "venclicodigo": 119,
+        "venfuncodigo": 22
+    },
+    {
+        "vencodigo": 53,
+        "vendata": "0107-01-06",
+        "venfilcodigo": 1,
+        "venclicodigo": 117,
+        "venfuncodigo": 23
+    },
+    {
+        "vencodigo": 54,
+        "vendata": "0107-01-06",
+        "venfilcodigo": 2,
+        "venclicodigo": 126,
+        "venfuncodigo": 26
+    },
+    {
+        "vencodigo": 55,
+        "vendata": "0107-01-06",
+        "venfilcodigo": 1,
+        "venclicodigo": 109,
+        "venfuncodigo": 30
+    },
+    {
+        "vencodigo": 56,
+        "vendata": "0107-01-06",
+        "venfilcodigo": 3,
+        "venclicodigo": 111,
+        "venfuncodigo": 12
+    },
+    {
+        "vencodigo": 57,
+        "vendata": "0107-01-07",
+        "venfilcodigo": 1,
+        "venclicodigo": 199,
+        "venfuncodigo": 16
+    },
+    {
+        "vencodigo": 58,
+        "vendata": "0107-01-07",
+        "venfilcodigo": 1,
+        "venclicodigo": 195,
+        "venfuncodigo": 6
+    },
+    {
+        "vencodigo": 59,
+        "vendata": "0107-01-07",
+        "venfilcodigo": 2,
+        "venclicodigo": 118,
+        "venfuncodigo": 12
+    },
+    {
+        "vencodigo": 60,
+        "vendata": "0107-01-07",
+        "venfilcodigo": 2,
+        "venclicodigo": 115,
+        "venfuncodigo": 2
+    },
+    {
+        "vencodigo": 61,
+        "vendata": "0107-01-07",
+        "venfilcodigo": 1,
+        "venclicodigo": 160,
+        "venfuncodigo": 5
+    },
+    {
+        "vencodigo": 62,
+        "vendata": "0107-01-07",
+        "venfilcodigo": 3,
+        "venclicodigo": 125,
+        "venfuncodigo": 8
+    },
+    {
+        "vencodigo": 63,
+        "vendata": "0107-01-07",
+        "venfilcodigo": 1,
+        "venclicodigo": 183,
+        "venfuncodigo": 2
+    },
+    {
+        "vencodigo": 64,
+        "vendata": "0107-01-07",
+        "venfilcodigo": 1,
+        "venclicodigo": 136,
+        "venfuncodigo": 7
+    },
+    {
+        "vencodigo": 65,
+        "vendata": "0107-01-07",
+        "venfilcodigo": 1,
+        "venclicodigo": 185,
+        "venfuncodigo": 10
+    },
+    {
+        "vencodigo": 66,
+        "vendata": "0107-01-07",
+        "venfilcodigo": 2,
+        "venclicodigo": 116,
+        "venfuncodigo": 21
+    },
+    {
+        "vencodigo": 67,
+        "vendata": "0107-01-07",
+        "venfilcodigo": 1,
+        "venclicodigo": 109,
+        "venfuncodigo": 26
+    },
+    {
+        "vencodigo": 68,
+        "vendata": "0107-01-07",
+        "venfilcodigo": 2,
+        "venclicodigo": 283,
+        "venfuncodigo": 27
+    },
+    {
+        "vencodigo": 69,
+        "vendata": "0107-01-08",
+        "venfilcodigo": 2,
+        "venclicodigo": 293,
+        "venfuncodigo": 16
+    },
+    {
+        "vencodigo": 70,
+        "vendata": "0107-01-08",
+        "venfilcodigo": 3,
+        "venclicodigo": 290,
+        "venfuncodigo": 2
+    },
+    {
+        "vencodigo": 71,
+        "vendata": "0107-01-08",
+        "venfilcodigo": 1,
+        "venclicodigo": 216,
+        "venfuncodigo": 3
+    },
+    {
+        "vencodigo": 72,
+        "vendata": "0107-01-08",
+        "venfilcodigo": 3,
+        "venclicodigo": 237,
+        "venfuncodigo": 8
+    },
+    {
+        "vencodigo": 73,
+        "vendata": "0107-01-08",
+        "venfilcodigo": 3,
+        "venclicodigo": 277,
+        "venfuncodigo": 11
+    },
+    {
+        "vencodigo": 74,
+        "vendata": "0107-01-08",
+        "venfilcodigo": 2,
+        "venclicodigo": 274,
+        "venfuncodigo": 10
+    },
+    {
+        "vencodigo": 75,
+        "vendata": "0107-01-08",
+        "venfilcodigo": 2,
+        "venclicodigo": 273,
+        "venfuncodigo": 20
+    },
+    {
+        "vencodigo": 76,
+        "vendata": "0107-01-08",
+        "venfilcodigo": 2,
+        "venclicodigo": 241,
+        "venfuncodigo": 21
+    },
+    {
+        "vencodigo": 77,
+        "vendata": "0107-01-08",
+        "venfilcodigo": 2,
+        "venclicodigo": 249,
+        "venfuncodigo": 29
+    },
+    {
+        "vencodigo": 78,
+        "vendata": "0107-01-08",
+        "venfilcodigo": 3,
+        "venclicodigo": 218,
+        "venfuncodigo": 16
+    },
+    {
+        "vencodigo": 79,
+        "vendata": "0107-01-08",
+        "venfilcodigo": 2,
+        "venclicodigo": 213,
+        "venfuncodigo": 18
+    },
+    {
+        "vencodigo": 80,
+        "vendata": "0107-01-08",
+        "venfilcodigo": 3,
+        "venclicodigo": 207,
+        "venfuncodigo": 20
+    },
+    {
+        "vencodigo": 81,
+        "vendata": "0107-01-08",
+        "venfilcodigo": 1,
+        "venclicodigo": 295,
+        "venfuncodigo": 30
+    },
+    {
+        "vencodigo": 82,
+        "vendata": "0107-01-08",
+        "venfilcodigo": 2,
+        "venclicodigo": 277,
+        "venfuncodigo": 10
+    },
+    {
+        "vencodigo": 83,
+        "vendata": "0107-01-08",
+        "venfilcodigo": 1,
+        "venclicodigo": 262,
+        "venfuncodigo": 11
+    },
+    {
+        "vencodigo": 84,
+        "vendata": "0107-01-08",
+        "venfilcodigo": 1,
+        "venclicodigo": 231,
+        "venfuncodigo": 14
+    },
+    {
+        "vencodigo": 85,
+        "vendata": "0107-01-08",
+        "venfilcodigo": 3,
+        "venclicodigo": 287,
+        "venfuncodigo": 17
+    },
+    {
+        "vencodigo": 86,
+        "vendata": "0107-01-08",
+        "venfilcodigo": 3,
+        "venclicodigo": 206,
+        "venfuncodigo": 19
+    },
+    {
+        "vencodigo": 87,
+        "vendata": "0107-01-08",
+        "venfilcodigo": 2,
+        "venclicodigo": 265,
+        "venfuncodigo": 21
+    },
+    {
+        "vencodigo": 88,
+        "vendata": "0107-01-08",
+        "venfilcodigo": 2,
+        "venclicodigo": 297,
+        "venfuncodigo": 22
+    },
+    {
+        "vencodigo": 89,
+        "vendata": "0107-01-08",
+        "venfilcodigo": 3,
+        "venclicodigo": 201,
+        "venfuncodigo": 27
+    },
+    {
+        "vencodigo": 90,
+        "vendata": "0107-01-08",
+        "venfilcodigo": 2,
+        "venclicodigo": 261,
+        "venfuncodigo": 25
+    },
+    {
+        "vencodigo": 91,
+        "vendata": "0107-01-09",
+        "venfilcodigo": 2,
+        "venclicodigo": 222,
+        "venfuncodigo": 21
+    },
+    {
+        "vencodigo": 92,
+        "vendata": "0107-01-09",
+        "venfilcodigo": 3,
+        "venclicodigo": 271,
+        "venfuncodigo": 28
+    },
+    {
+        "vencodigo": 93,
+        "vendata": "0107-01-09",
+        "venfilcodigo": 3,
+        "venclicodigo": 291,
+        "venfuncodigo": 7
+    },
+    {
+        "vencodigo": 94,
+        "vendata": "0107-01-09",
+        "venfilcodigo": 2,
+        "venclicodigo": 207,
+        "venfuncodigo": 22
+    },
+    {
+        "vencodigo": 95,
+        "vendata": "0107-01-09",
+        "venfilcodigo": 3,
+        "venclicodigo": 290,
+        "venfuncodigo": 9
+    },
+    {
+        "vencodigo": 96,
+        "vendata": "0107-01-09",
+        "venfilcodigo": 1,
+        "venclicodigo": 274,
+        "venfuncodigo": 29
+    },
+    {
+        "vencodigo": 97,
+        "vendata": "0107-01-09",
+        "venfilcodigo": 2,
+        "venclicodigo": 206,
+        "venfuncodigo": 27
+    },
+    {
+        "vencodigo": 98,
+        "vendata": "0107-01-09",
+        "venfilcodigo": 2,
+        "venclicodigo": 237,
+        "venfuncodigo": 11
+    },
+    {
+        "vencodigo": 99,
+        "vendata": "0107-01-09",
+        "venfilcodigo": 3,
+        "venclicodigo": 235,
+        "venfuncodigo": 16
+    },
+    {
+        "vencodigo": 100,
+        "vendata": "0107-01-10",
+        "venfilcodigo": 1,
+        "venclicodigo": 444,
+        "venfuncodigo": 12
+    },
+    {
+        "vencodigo": 101,
+        "vendata": "0107-01-10",
+        "venfilcodigo": 2,
+        "venclicodigo": 461,
+        "venfuncodigo": 7
+    },
+    {
+        "vencodigo": 102,
+        "vendata": "0107-01-10",
+        "venfilcodigo": 3,
+        "venclicodigo": 480,
+        "venfuncodigo": 10
+    },
+    {
+        "vencodigo": 103,
+        "vendata": "0107-01-10",
+        "venfilcodigo": 1,
+        "venclicodigo": 462,
+        "venfuncodigo": 12
+    },
+    {
+        "vencodigo": 104,
+        "vendata": "0107-01-10",
+        "venfilcodigo": 3,
+        "venclicodigo": 452,
+        "venfuncodigo": 2
+    },
+    {
+        "vencodigo": 105,
+        "vendata": "0107-01-10",
+        "venfilcodigo": 3,
+        "venclicodigo": 422,
+        "venfuncodigo": 9
+    },
+    {
+        "vencodigo": 106,
+        "vendata": "0107-01-11",
+        "venfilcodigo": 2,
+        "venclicodigo": 410,
+        "venfuncodigo": 22
+    },
+    {
+        "vencodigo": 107,
+        "vendata": "0107-01-11",
+        "venfilcodigo": 2,
+        "venclicodigo": 492,
+        "venfuncodigo": 29
+    },
+    {
+        "vencodigo": 108,
+        "vendata": "0107-01-11",
+        "venfilcodigo": 2,
+        "venclicodigo": 498,
+        "venfuncodigo": 30
+    },
+    {
+        "vencodigo": 109,
+        "vendata": "0107-01-11",
+        "venfilcodigo": 2,
+        "venclicodigo": 444,
+        "venfuncodigo": 2
+    },
+    {
+        "vencodigo": 110,
+        "vendata": "0107-01-11",
+        "venfilcodigo": 1,
+        "venclicodigo": 436,
+        "venfuncodigo": 8
+    },
+    {
+        "vencodigo": 111,
+        "vendata": "0107-08-26",
+        "venfilcodigo": 1,
+        "venclicodigo": 100,
+        "venfuncodigo": 10
     }
 ]

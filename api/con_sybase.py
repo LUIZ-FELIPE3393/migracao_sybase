@@ -23,6 +23,7 @@ def write_to_json(results):
 
 def convert_rows_to_dict(rows, columns):
     results = []
+
     for row in rows:
         results.append(dict(zip(columns, row)))
     
