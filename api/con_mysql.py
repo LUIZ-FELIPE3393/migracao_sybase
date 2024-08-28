@@ -34,16 +34,18 @@ def create_table( db_name, table_name ):
         column = ""
 
         match (i["type"]):
-            case 56:
+            case 56 | 38 | 66:
                 column = f"{i["name"]} INT"
-            case 63:
+            case 63 | 108:
                 column = f"{i["name"]} NUMERIC({i["prec"]}, {i["scale"]})"
             case 47:
                 column = f"{i["name"]} CHAR"
-            case 123:
+            case 123 | 49:
                 column = f"{i["name"]} DATE"
             case 39:
                 column = f"{i["name"]} VARCHAR({i["length"]})"
+            case _:
+                column = f"{i["name"]} VARCHAR(64)"
 
         columns.append(column)
 
@@ -51,6 +53,7 @@ def create_table( db_name, table_name ):
 
     mycursor.execute(f"CREATE TABLE {table_name} ({'%s' % ', '.join(map(str, columns))})")
 
+    mydb.commit()
     mydb.close()
 
 def insert_data( db_name, table_name ):
@@ -64,6 +67,8 @@ def insert_data( db_name, table_name ):
     f = open("./api/resultset.json")
     data = json.load(f)
     mycursor = mydb.cursor()
+
+    print(data)
 
     for i in data:
         value_list = list(i.values())
