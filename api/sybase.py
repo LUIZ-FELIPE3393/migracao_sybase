@@ -4,7 +4,7 @@ import simplejson as json
 
 user = "sa" 
 passwd = "123456"
-host = "192.168.56.101" #Altere para ficar de acordo com sua VM
+host = "192.168.1.35" #Altere para ficar de acordo com sua VM
 db = "master"
 port = "5000"
 driver="Devart ODBC Driver for ASE"
@@ -18,7 +18,7 @@ def create_cursor(query):
 def write_to_json(results):
     json_result = json.dumps(results, indent=4, default=str)
 
-    with open(sys.argv[3], "w") as outfile:
+    with open(sys.argv[1], "w") as outfile:
         outfile.write(json_result)
 
 def convert_rows_to_dict(rows, columns):
@@ -97,14 +97,14 @@ def q_select_all_from_table(database, table):
     conn.close()
 
 # Match for functions below
-match sys.argv[1]:
+match sys.argv[2]:
     case 'q_databases':
         q_databases()
     case 'q_list_tables':
-        q_list_tables(sys.argv[2])
+        q_list_tables(sys.argv[3])
     case 'q_list_columns':
-        q_list_columns(sys.argv[2][0], sys.argv[2][1])
+        q_list_columns(sys.argv[3][0], sys.argv[3][1])
     case 'q_related_tables':
-        q_related_tables(sys.argv[2][0], sys.argv[2][1])
+        q_related_tables(sys.argv[3][0], sys.argv[3][1])
     case 'q_select_all_from_table':
-        q_select_all_from_table(sys.argv[2][0], sys.argv[2][1])
+        q_select_all_from_table(sys.argv[3][0], sys.argv[3][1])
