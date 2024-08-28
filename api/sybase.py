@@ -4,8 +4,8 @@ import simplejson as json
 
 user = "sa" 
 passwd = "123456"
-host = "192.168.56.101"
-db = "bd2024"
+host = "192.168.1.35" #Altere para ficar de acordo com sua VM
+db = "master"
 port = "5000"
 driver="Devart ODBC Driver for ASE"
 conn = pyodbc.connect(driver=driver, server=host, database=db, port = port, uid=user, pwd=passwd)
@@ -18,7 +18,7 @@ def create_cursor(query):
 def write_to_json(results):
     json_result = json.dumps(results, indent=4, default=str)
 
-    with open(sys.argv[3], "w") as outfile:
+    with open(sys.argv[1], "w") as outfile:
         outfile.write(json_result)
 
 def convert_rows_to_dict(rows, columns):
@@ -44,8 +44,47 @@ def q_databases():
 
     conn.close()
 
-def q_count(table):
-    query= f"select * from {table} where clicodigo IN (1, 2, 3)"
+def q_list_tables(database):
+    query= f"EXEC sp_list_tables_from_db {database}"
+    cursor = create_cursor(query)
+
+    columns = [column[0] for column in cursor.description]
+    rows = cursor.fetchall()    
+    results = convert_rows_to_dict(rows, columns)
+
+    write_to_json(results)
+    print("OK")
+    
+    conn.close()
+
+def q_list_columns (database, table):
+    query= f"EXEC sp_listar_colunas_de_tabela {database} {table}"
+    cursor = create_cursor(query)
+
+    columns = [column[0] for column in cursor.description]
+    rows = cursor.fetchall()    
+    results = convert_rows_to_dict(rows, columns)
+
+    write_to_json(results)
+    print("OK")
+    
+    conn.close()
+
+def q_related_tables(database, table):
+    query= f"EXEC sp_listar_tabelas_relacionadas {database} {table}"
+    cursor = create_cursor(query)
+
+    columns = [column[0] for column in cursor.description]
+    rows = cursor.fetchall()    
+    results = convert_rows_to_dict(rows, columns)
+
+    write_to_json(results)
+    print("OK")
+    
+    conn.close()
+
+def q_select_all_from_table(database, table):
+    query= f"SELECT * FROM {database}.dbo.{table}"
     cursor = create_cursor(query)
 
     columns = [column[0] for column in cursor.description]
@@ -58,9 +97,14 @@ def q_count(table):
     conn.close()
 
 # Match for functions below
-match sys.argv[1]:
-    case 'q_count':
-        q_count(sys.argv[2])
+match sys.argv[2]:
     case 'q_databases':
         q_databases()
-
+    case 'q_list_tables':
+        q_list_tables(sys.argv[3])
+    case 'q_list_columns':
+        q_list_columns(sys.argv[3][0], sys.argv[3][1])
+    case 'q_related_tables':
+        q_related_tables(sys.argv[3][0], sys.argv[3][1])
+    case 'q_select_all_from_table':
+        q_select_all_from_table(sys.argv[3][0], sys.argv[3][1])
