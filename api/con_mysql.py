@@ -12,7 +12,9 @@ def create_schema( db_name ):
     mycursor = mydb.cursor()
     mycursor.execute(f"CREATE SCHEMA {db_name}")
 
-def create_table( db_name, table_name, table_columns ):
+    print("OK")
+
+def create_table( db_name, table_name ):
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
@@ -20,24 +22,49 @@ def create_table( db_name, table_name, table_columns ):
         database=db_name
     )
 
-    f = open("./resultset.json")
+    f = open("./api/resultset.json")
 
     data = json.load(f)
 
-    print(data)
+    # print(data)
 
     mycursor = mydb.cursor()
-    mycursor.execute(f"CREATE TABLE {table_name} ()")
+
+    columns = []
+
+    for i in data:
+        column = ""
+
+        match (i["type"]):
+            case 56:
+                column = f"{i["name"]} INT"
+            case 63:
+                column = f"{i["name"]} NUMERIC({i["prec"]}, {i["scale"]})"
+            case 47:
+                column = f"{i["name"]} CHAR"
+            case 123:
+                column = f"{i["name"]} DATE"
+            case 39:
+                column = f"{i["name"]} VARCHAR({i["length"]})"
+
+        columns.append(column)
+
+    print(f"CREATE TABLE {table_name} ({'%s' % ', '.join(map(str, columns))})")
+
+    mycursor.execute(f"CREATE TABLE {table_name} ({'%s' % ', '.join(map(str, columns))})")
+
+def primary_keys( db_name, table_name, column_names ):
+    mydb = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="5286",
+        database=db_name
+    )
+
 
 # Match for functions below
 match sys.argv[2]:
-    case 'q_databases':
-        q_databases()
-    case 'q_list_tables':
-        q_list_tables(sys.argv[3])
-    case 'q_list_columns':
-        q_list_columns(sys.argv[3], sys.argv[4])
-    case 'q_related_tables':
-        q_related_tables(sys.argv[3], sys.argv[4])
-    case 'q_select_all_from_table':
-        q_select_all_from_table(sys.argv[3], sys.argv[4])
+    case 'create_schema':
+        create_schema(sys.argv[3])
+    case 'create_table':
+        create_table(sys.argv[3], sys.argv[4])
