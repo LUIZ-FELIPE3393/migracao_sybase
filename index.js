@@ -2,11 +2,16 @@ const express = require('express');
 const { spawn } = require('child_process');
 const { join } = require('path');
 const { readFile } = require('fs');
+const path = require('path');
 const app = express();
 const port = 8080;
 
 app.get("/", (req, res) => {
-    const pyPrc = spawn('python', ['./api/sybase.py', 'q_databases', 'cliente', './api/resultset.json']);
+    res.sendFile(path.join(__dirname, "./index.html"));
+});
+
+app.get("/sybase-db", (req, res) => {
+    const pyPrc = spawn('python', ['./api/sybase.py', 'q_databases', '', './api/resultset.json']);
 
     pyPrc.stdout.on('data', (result) => {
         console.log(result)
