@@ -52,13 +52,17 @@ function inserirTabela(banco, table) {
     })
 }
 
+function criarBanco(banco) {
+    spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'create_schema', banco]);
+}
+
 app.post("/migrar", (req, res) => {
     // Rota da migração
 
-    const banco = "bd2024"
-
-    for (const table in req.body) {
-        inserirTabela(banco, table)
+    for (const table in req.body){
+        criarBanco(req.body[table])
+        console.log(table, req.body[table])
+        inserirTabela(table, req.body[table])
     }
 })
 

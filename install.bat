@@ -1,1 +1,1 @@
-pip install -r ./api/requirements.txt
+pip install -r api/requirements.txt
