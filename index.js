@@ -27,7 +27,34 @@ app.get("/json/:filename", (req, res) => {
     })
 });
 
-function inserirTabela(banco, table) {
+/*function inserirTabela(banco, table) {
+    let pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_list_columns', banco, table]);
+    
+    pyPrc.stdout.on('data', (result) => {
+        console.log(result);
+
+        // Insere tabela no banco
+        pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'create_table', banco, table]);
+
+        pyPrc.stdout.on('data', (result) => {
+            console.log(result);
+
+            // Puxa dados da tabela pro resultset.json
+            pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_select_all_from_table', banco, table]);
+
+            pyPrc.stdout.on('data', (result) => {
+                console.log(result);
+
+                // Insere dados da tabela no banco
+                pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'insert_data', banco, table]);
+            })
+        })
+    })
+}*/
+
+function inserirTabela(banco, table) { // TESTE
+    fetch('/json/')
+
     let pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_list_columns', banco, table]);
     
     pyPrc.stdout.on('data', (result) => {
