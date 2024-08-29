@@ -2,7 +2,7 @@ const express = require('express');
 const http = require('http');
 const { spawn } = require('child_process');
 const { join } = require('path');
-const { readFile } = require('fs');
+const { readFile, writeFile } = require('fs');
 const path = require('path');
 const app = express();
 const server = http.createServer(app);
@@ -53,7 +53,15 @@ app.get("/json/:filename", (req, res) => {
 }*/
 
 function inserirTabela(banco, table) { // TESTE
-    fetch('/json/')
+    fetch('/json/funcionario_c').then(data => data.json()).then(json => {
+        writeFile('/api/resultset.json', JSON.stringify(json))
+
+        pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'create_table', banco, table]);
+
+        pyPrc.stdout.on('data', (result) => {
+
+        })
+    })
 
     let pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_list_columns', banco, table]);
     
