@@ -64,39 +64,40 @@ function inserirTabela(banco, table) { // TESTE
     fetch('/json/funcionario_c').then(data => data.json()).then(json => {
         writeFile('/api/resultset.json', JSON.stringify(json))
 
-        pyPrc = spawn('python', [PATH_MYSQL_API, './json/resultset.json', 'create_table', banco, table]);
+        pyPrc = spawn('python', [PATH_MYSQL_API, PATH_GENERAL_RESULTSET, 'create_table', banco, table]);
 
         pyPrc.stdout.on('data', (result) => {
 
         })
     })
 
-    let pyPrc = spawn('python', [PATH_SYBASE_API, './json/resultset.json', 'q_list_columns', banco, table]);
+    // Puxa tabelas para o json
+    let pyPrc = spawn('python', [PATH_SYBASE_API, PATH_TABLE_RESULTSET, 'q_list_columns', banco, table]);
     
     pyPrc.stdout.on('data', (result) => {
         console.log(result);
 
         // Insere tabela no banco
-        pyPrc = spawn('python', [PATH_MYSQL_API, './json/resultset.json', 'create_table', banco, table]);
+        pyPrc = spawn('python', [PATH_MYSQL_API, PATH_TABLE_RESULTSET, 'create_table', banco, table]);
 
         pyPrc.stdout.on('data', (result) => {
             console.log(result);
 
-            // Puxa dados da tabela pro resultset.json
-            pyPrc = spawn('python', [PATH_SYBASE_API, './json/resultset.json', 'q_select_all_from_table', banco, table]);
+            // Puxa dados da tabela pro data.json
+            pyPrc = spawn('python', [PATH_SYBASE_API, PATH_DATA_RESULTSET, 'q_select_all_from_table', banco, table]);
 
             pyPrc.stdout.on('data', (result) => {
                 console.log(result);
 
                 // Insere dados da tabela no banco
-                pyPrc = spawn('python', [PATH_MYSQL_API, './json/resultset.json', 'insert_data', banco, table]);
+                pyPrc = spawn('python', [PATH_MYSQL_API, PATH_DATA_RESULTSET, 'insert_data', banco, table]);
             })
         })
     })
 }
 
 function criarBanco(banco) {
-    spawn('python', [PATH_MYSQL_API, './json/resultset.json', 'create_schema', banco]);
+    spawn('python', [PATH_MYSQL_API, PATH_GENERAL_RESULTSET, 'create_schema', banco]);
 }
 
 app.post("/migrar", (req, res) => {
@@ -113,13 +114,13 @@ app.post("/mysql-db/insere-dados/:database/:table", (req, res) => {
     // Insere dados em tabela existente no MySQL
 
     // Puxa dados da tabela pro resultset.json
-    pyPrc = spawn('python', [PATH_SYBASE_API, './json/resultset.json', 'q_select_all_from_table', req.params.database, req.params.table]);
+    pyPrc = spawn('python', [PATH_SYBASE_API, PATH_GENERAL_RESULTSET, 'q_select_all_from_table', req.params.database, req.params.table]);
 
     pyPrc.stdout.on('data', (result) => {
         console.log(result);
 
         // Insere dados da tabela no banco
-        pyPrc = spawn('python', [PATH_MYSQL_API, './json/resultset.json', 'insert_data', req.params.database, req.params.table]);
+        pyPrc = spawn('python', [PATH_MYSQL_API, PATH_GENERAL_RESULTSET, 'insert_data', req.params.database, req.params.table]);
     })
 })
 
@@ -127,25 +128,25 @@ app.post("/mysql-db/com-dados/:database/:table", (req, res) => {
     // Insere tabela sem dados no MySQL
 
     // Puxa colunas da tabela pro resultset.json
-    let pyPrc = spawn('python', [PATH_SYBASE_API, './json/resultset.json', 'q_list_columns', req.params.database, req.params.table]);
+    let pyPrc = spawn('python', [PATH_SYBASE_API, PATH_GENERAL_RESULTSET, 'q_list_columns', req.params.database, req.params.table]);
     
     pyPrc.stdout.on('data', (result) => {
         console.log(result);
 
         // Insere tabela no banco
-        pyPrc = spawn('python', ['./api/con_mysql.py', './json/resultset.json', 'create_table', req.params.database, req.params.table]);
+        pyPrc = spawn('python', ['./api/con_mysql.py', PATH_GENERAL_RESULTSET, 'create_table', req.params.database, req.params.table]);
 
         pyPrc.stdout.on('data', (result) => {
             console.log(result);
 
             // Puxa dados da tabela pro resultset.json
-            pyPrc = spawn('python', ['./api/con_sybase.py', './json/resultset.json', 'q_select_all_from_table', req.params.database, req.params.table]);
+            pyPrc = spawn('python', ['./api/con_sybase.py', PATH_GENERAL_RESULTSET, 'q_select_all_from_table', req.params.database, req.params.table]);
 
             pyPrc.stdout.on('data', (result) => {
                 console.log(result);
 
                 // Insere dados da tabela no banco
-                pyPrc = spawn('python', ['./api/con_mysql.py', './json/resultset.json', 'insert_data', req.params.database, req.params.table]);
+                pyPrc = spawn('python', ['./api/con_mysql.py', PATH_GENERAL_RESULTSET, 'insert_data', req.params.database, req.params.table]);
             })
         })
     })
@@ -153,13 +154,13 @@ app.post("/mysql-db/com-dados/:database/:table", (req, res) => {
 
 app.post("/mysql-db/sem-dados/:database/:table", (req, res) => {
     // Insere tabela sem dados no MySQL
-    let pyPrc = spawn('python', ['./api/con_sybase.py', './json/resultset.json', 'q_list_columns', req.params.database, req.params.table]);
+    let pyPrc = spawn('python', ['./api/con_sybase.py', PATH_GENERAL_RESULTSET, 'q_list_columns', req.params.database, req.params.table]);
     
     pyPrc.stdout.on('data', (result) => {
         console.log(result);
 
         // Insere tabela no banco
-        pyPrc = spawn('python', ['./api/con_mysql.py', './json/resultset.json', 'create_table', req.params.database, req.params.table]);
+        pyPrc = spawn('python', ['./api/con_mysql.py', PATH_GENERAL_RESULTSET, 'create_table', req.params.database, req.params.table]);
     })
 });
 
