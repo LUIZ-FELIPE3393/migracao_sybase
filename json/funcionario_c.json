@@ -1,0 +1,65 @@
+[
+    {
+        "name": "funcodigo",
+        "length": 4,
+        "type": 56,
+        "prec": null,
+        "scale": null
+    },
+    {
+        "name": "funnome",
+        "length": 50,
+        "type": 39,
+        "prec": null,
+        "scale": null
+    },
+    {
+        "name": "funsalario",
+        "length": 4,
+        "type": 63,
+        "prec": 6,
+        "scale": 2
+    },
+    {
+        "name": "funbaicodigo",
+        "length": 4,
+        "type": 56,
+        "prec": null,
+        "scale": null
+    },
+    {
+        "name": "funcodgerente",
+        "length": 4,
+        "type": 38,
+        "prec": null,
+        "scale": null
+    },
+    {
+        "name": "fundtdem",
+        "length": 4,
+        "type": 123,
+        "prec": null,
+        "scale": null
+    },
+    {
+        "name": "funestcodigo",
+        "length": 4,
+        "type": 56,
+        "prec": null,
+        "scale": null
+    },
+    {
+        "name": "funsenha",
+        "length": 20,
+        "type": 39,
+        "prec": null,
+        "scale": null
+    },
+    {
+        "name": "funlogin",
+        "length": 30,
+        "type": 39,
+        "prec": null,
+        "scale": null
+    }
+]
