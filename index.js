@@ -20,6 +20,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/json/:filename", (req, res) => {
+    // Rota dos arquivos
     readFile("./json/" + req.params.filename, (error, data) => {
         console.log(data)
         return res.json(JSON.parse(data?.toString()))
@@ -51,11 +52,17 @@ function inserirTabela(banco, table) {
     })
 }
 
-app.post("/migrar", (req, res) => {
-    const banco = "bd2024"
+function criarBanco(banco) {
+    spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'create_schema', banco]);
+}
 
-    for (const table in req.body) {
-        inserirTabela(banco, table)
+app.post("/migrar", (req, res) => {
+    // Rota da migração
+
+    for (const table in req.body){
+        criarBanco(req.body[table])
+        console.log(table, req.body[table])
+        inserirTabela(table, req.body[table])
     }
 })
 
@@ -145,6 +152,7 @@ app.get("/sybase-db/:database/:table", (req, res) => {
 });
 
 app.get("/sybase-db/:database", (req, res) => {
+    // Rota retorna tabelas de um banco
     const pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_list_tables', req.params.database]);
 
     pyPrc.stdout.on('data', (result) => {
@@ -171,6 +179,7 @@ app.get("/sybase-db/:database", (req, res) => {
 })
 
 app.get("/sybase-db", async (req, res) => {
+    // Rota lista os bancos do Sybase
     const pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_databases', '']);
 
     pyPrc.stdout.on('data', (result) => {

@@ -2,11 +2,15 @@ import mysql.connector
 import simplejson as json
 import sys
 
+host="localhost"
+user="root"
+password="root"
+
 def create_schema( db_name ):
     mydb = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="root"
+        host=host,
+        user=user,
+        password=password
     )   
 
     mycursor = mydb.cursor()
@@ -18,9 +22,9 @@ def create_schema( db_name ):
 
 def create_table( db_name, table_name ):
     mydb = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="root",
+        host=host,
+        user=user,
+        password=password,
         database=db_name
     )
 
@@ -58,9 +62,9 @@ def create_table( db_name, table_name ):
 
 def insert_data( db_name, table_name ):
     mydb = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="root",
+        host=host,
+        user=user,
+        password=password,
         database=db_name
     )
 

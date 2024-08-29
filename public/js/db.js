@@ -6,13 +6,13 @@ fetch('/json/bancos.json')
             const database = document.createElement("div");
             database.innerHTML = databaseHTML.replaceAll(":name:", db.name);
             document.querySelector("#idSybase").appendChild(database);
-            fetch('/json/tabelas.json')
+            fetch(`/json/${db.name}.json`)
                 .then((data) => data.json())
                 .then((json) => {
                     for (const tb of json) {
                         console.log(json)
                         const table = document.createElement("div");
-                        table.innerHTML = tableHTML.replaceAll(":name:", tb.name);
+                        table.innerHTML = tableHTML.replaceAll(":name:", tb.name).replaceAll(":database:", db.name);
                         document.querySelector("#"+db.name).appendChild(table);
                     }
                 });
@@ -22,7 +22,7 @@ fetch('/json/bancos.json')
     });
 
 const tableHTML = `
-    <input class="form-check-input" type="checkbox" id=":name:" name=":name:" value="check">
+    <input class="form-check-input" type="checkbox" id=":name:" name=":name:" value=":database:">
     <label class="form-check-label">:name:</label><br>
 `
 
