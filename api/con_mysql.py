@@ -4,7 +4,7 @@ import sys
 
 host="localhost"
 user="root"
-password="root"
+password="5286"
 
 def create_schema( db_name ):
     mydb = mysql.connector.connect(

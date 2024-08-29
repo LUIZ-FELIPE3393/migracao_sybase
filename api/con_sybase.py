@@ -4,7 +4,7 @@ import simplejson as json
 
 user = "sa" 
 passwd = "123456"
-host = "192.168.56.101" #Altere para ficar de acordo com sua VM
+host = "192.168.1.35" #Altere para ficar de acordo com sua VM
 db = "master"
 port = "5000"
 driver="Devart ODBC Driver for ASE"
