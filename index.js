@@ -26,33 +26,37 @@ app.get("/json/:filename", (req, res) => {
     })
 });
 
-function inserirTabela() {
-    let pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_list_columns', req.params.database, req.params.table]);
+function inserirTabela(banco, table) {
+    let pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_list_columns', banco, table]);
     
     pyPrc.stdout.on('data', (result) => {
         console.log(result);
 
         // Insere tabela no banco
-        pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'create_table', req.params.database, req.params.table]);
+        pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'create_table', banco, table]);
 
         pyPrc.stdout.on('data', (result) => {
             console.log(result);
 
             // Puxa dados da tabela pro resultset.json
-            pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_select_all_from_table', req.params.database, req.params.table]);
+            pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_select_all_from_table', banco, table]);
 
             pyPrc.stdout.on('data', (result) => {
                 console.log(result);
 
                 // Insere dados da tabela no banco
-                pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'insert_data', req.params.database, req.params.table]);
+                pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'insert_data', banco, table]);
             })
         })
     })
 }
 
 app.post("/migrar", (req, res) => {
+    const banco = "bd2024"
 
+    for (const table in req.body) {
+        inserirTabela(banco, table)
+    }
 })
 
 app.post("/mysql-db/insere-dados/:database/:table", (req, res) => {
