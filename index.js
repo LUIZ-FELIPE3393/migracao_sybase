@@ -8,6 +8,14 @@ const app = express();
 const server = http.createServer(app);
 const port = 8080;
 
+const PATH_MYSQL_API = './api/con_mysql.py';
+const PATH_SYBASE_API = './api/con_sybase.py';
+
+const PATH_GENERAL_RESULTSET = './json/resultset.json';
+const PATH_DATA_RESULTSET = './json/data.json';
+const PATH_TABLE_RESULTSET = './json/tables.py';
+
+
 app.use(express.urlencoded({ extended: false })); 
 app.use(express.json());
 
@@ -56,39 +64,39 @@ function inserirTabela(banco, table) { // TESTE
     fetch('/json/funcionario_c').then(data => data.json()).then(json => {
         writeFile('/api/resultset.json', JSON.stringify(json))
 
-        pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'create_table', banco, table]);
+        pyPrc = spawn('python', [PATH_MYSQL_API, './json/resultset.json', 'create_table', banco, table]);
 
         pyPrc.stdout.on('data', (result) => {
 
         })
     })
 
-    let pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_list_columns', banco, table]);
+    let pyPrc = spawn('python', [PATH_SYBASE_API, './json/resultset.json', 'q_list_columns', banco, table]);
     
     pyPrc.stdout.on('data', (result) => {
         console.log(result);
 
         // Insere tabela no banco
-        pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'create_table', banco, table]);
+        pyPrc = spawn('python', [PATH_MYSQL_API, './json/resultset.json', 'create_table', banco, table]);
 
         pyPrc.stdout.on('data', (result) => {
             console.log(result);
 
             // Puxa dados da tabela pro resultset.json
-            pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_select_all_from_table', banco, table]);
+            pyPrc = spawn('python', [PATH_SYBASE_API, './json/resultset.json', 'q_select_all_from_table', banco, table]);
 
             pyPrc.stdout.on('data', (result) => {
                 console.log(result);
 
                 // Insere dados da tabela no banco
-                pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'insert_data', banco, table]);
+                pyPrc = spawn('python', [PATH_MYSQL_API, './json/resultset.json', 'insert_data', banco, table]);
             })
         })
     })
 }
 
 function criarBanco(banco) {
-    spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'create_schema', banco]);
+    spawn('python', [PATH_MYSQL_API, './json/resultset.json', 'create_schema', banco]);
 }
 
 app.post("/migrar", (req, res) => {
@@ -105,13 +113,13 @@ app.post("/mysql-db/insere-dados/:database/:table", (req, res) => {
     // Insere dados em tabela existente no MySQL
 
     // Puxa dados da tabela pro resultset.json
-    pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_select_all_from_table', req.params.database, req.params.table]);
+    pyPrc = spawn('python', [PATH_SYBASE_API, './json/resultset.json', 'q_select_all_from_table', req.params.database, req.params.table]);
 
     pyPrc.stdout.on('data', (result) => {
         console.log(result);
 
         // Insere dados da tabela no banco
-        pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'insert_data', req.params.database, req.params.table]);
+        pyPrc = spawn('python', [PATH_MYSQL_API, './json/resultset.json', 'insert_data', req.params.database, req.params.table]);
     })
 })
 
@@ -119,25 +127,25 @@ app.post("/mysql-db/com-dados/:database/:table", (req, res) => {
     // Insere tabela sem dados no MySQL
 
     // Puxa colunas da tabela pro resultset.json
-    let pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_list_columns', req.params.database, req.params.table]);
+    let pyPrc = spawn('python', [PATH_SYBASE_API, './json/resultset.json', 'q_list_columns', req.params.database, req.params.table]);
     
     pyPrc.stdout.on('data', (result) => {
         console.log(result);
 
         // Insere tabela no banco
-        pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'create_table', req.params.database, req.params.table]);
+        pyPrc = spawn('python', ['./api/con_mysql.py', './json/resultset.json', 'create_table', req.params.database, req.params.table]);
 
         pyPrc.stdout.on('data', (result) => {
             console.log(result);
 
             // Puxa dados da tabela pro resultset.json
-            pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_select_all_from_table', req.params.database, req.params.table]);
+            pyPrc = spawn('python', ['./api/con_sybase.py', './json/resultset.json', 'q_select_all_from_table', req.params.database, req.params.table]);
 
             pyPrc.stdout.on('data', (result) => {
                 console.log(result);
 
                 // Insere dados da tabela no banco
-                pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'insert_data', req.params.database, req.params.table]);
+                pyPrc = spawn('python', ['./api/con_mysql.py', './json/resultset.json', 'insert_data', req.params.database, req.params.table]);
             })
         })
     })
@@ -145,29 +153,29 @@ app.post("/mysql-db/com-dados/:database/:table", (req, res) => {
 
 app.post("/mysql-db/sem-dados/:database/:table", (req, res) => {
     // Insere tabela sem dados no MySQL
-    let pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_list_columns', req.params.database, req.params.table]);
+    let pyPrc = spawn('python', ['./api/con_sybase.py', './json/resultset.json', 'q_list_columns', req.params.database, req.params.table]);
     
     pyPrc.stdout.on('data', (result) => {
         console.log(result);
 
         // Insere tabela no banco
-        pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'create_table', req.params.database, req.params.table]);
+        pyPrc = spawn('python', ['./api/con_mysql.py', './json/resultset.json', 'create_table', req.params.database, req.params.table]);
     })
 });
 
 app.post("/mysql-db/novo-banco/:database", (req, res) => {
     // Cria novo banco de dados no MySQL
-    spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'create_schema', req.params.database]);
+    spawn('python', [PATH_MYSQL_API, PATH_GENERAL_RESULTSET, 'create_schema', req.params.database]);
 });
 
 app.get("/sybase-db/:database/:table", (req, res) => {
-    const pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_list_tables', req.params.database, req.params.table]);
+    const pyPrc = spawn('python', [PATH_SYBASE_API, PATH_GENERAL_RESULTSET, 'q_list_tables', req.params.database, req.params.table]);
 
     pyPrc.stdout.on('data', (result) => {
         console.log(result)
 
         try {
-            readFile('./api/resultset.json', (err, data) => {
+            readFile(PATH_GENERAL_RESULTSET, (err, data) => {
                 if(err) {
                     console.error(err);
                     throw err;
@@ -188,13 +196,13 @@ app.get("/sybase-db/:database/:table", (req, res) => {
 
 app.get("/sybase-db/:database", (req, res) => {
     // Rota retorna tabelas de um banco
-    const pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_list_tables', req.params.database]);
+    const pyPrc = spawn('python', [PATH_SYBASE_API, PATH_GENERAL_RESULTSET, 'q_list_tables', req.params.database]);
 
     pyPrc.stdout.on('data', (result) => {
         console.log(result)
 
         try {
-            readFile('./api/resultset.json', (err, data) => {
+            readFile(PATH_GENERAL_RESULTSET, (err, data) => {
                 if(err) {
                     console.error(err);
                     throw err;
@@ -215,13 +223,13 @@ app.get("/sybase-db/:database", (req, res) => {
 
 app.get("/sybase-db", async (req, res) => {
     // Rota lista os bancos do Sybase
-    const pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_databases', '']);
+    const pyPrc = spawn('python', [PATH_SYBASE_API, PATH_GENERAL_RESULTSET, 'q_databases', '']);
 
     pyPrc.stdout.on('data', (result) => {
         console.log(result)
 
         try {
-            readFile('./api/resultset.json', (err, data) => {
+            readFile(PATH_GENERAL_RESULTSET, (err, data) => {
                 if(err) {
                     console.error(err);
                     throw err;
