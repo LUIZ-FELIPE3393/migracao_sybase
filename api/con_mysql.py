@@ -28,7 +28,7 @@ def create_table( db_name, table_name ):
         database=db_name
     )
 
-    f = open("./api/resultset.json")
+    f = open(sys.argv[1])
     data = json.load(f)
     mycursor = mydb.cursor()
 
@@ -68,7 +68,7 @@ def insert_data( db_name, table_name ):
         database=db_name
     )
 
-    f = open("./api/resultset.json")
+    f = open(sys.argv[1])
     data = json.load(f)
     mycursor = mydb.cursor()
 
