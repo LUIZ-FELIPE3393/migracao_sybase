@@ -1,6 +1,6 @@
 const express = require('express');
 const http = require('http');
-const { spawn } = require('child_process');
+const { spawn, spawnSync } = require('child_process');
 const { join } = require('path');
 const { readFile, writeFile } = require('fs');
 const path = require('path');
@@ -195,9 +195,9 @@ app.get("/sybase-db/:database/:table", (req, res) => {
     }) 
 });
 
-app.get("/sybase-db/:database", (req, res) => {
+app.get("/sybase-db/:database", async (req, res) => {
     // Rota retorna tabelas de um banco
-    const pyPrc = spawn('python', [PATH_SYBASE_API, PATH_GENERAL_RESULTSET, 'q_list_tables', req.params.database]);
+    const pyPrc = await spawn('python', [PATH_SYBASE_API, PATH_GENERAL_RESULTSET, 'q_list_tables', req.params.database]);
 
     pyPrc.stdout.on('data', (result) => {
         console.log(result)
@@ -209,6 +209,8 @@ app.get("/sybase-db/:database", (req, res) => {
                     throw err;
                 }
                 const resultParsed = JSON.parse(data?.toString());
+                console.log(req.params.database);
+                console.log(resultParsed);
                 return res.json(resultParsed);
             });
             
@@ -224,7 +226,7 @@ app.get("/sybase-db/:database", (req, res) => {
 
 app.get("/sybase-db", async (req, res) => {
     // Rota lista os bancos do Sybase
-    const pyPrc = spawn('python', [PATH_SYBASE_API, PATH_GENERAL_RESULTSET, 'q_databases', '']);
+    const pyPrc = await spa('python', [PATH_SYBASE_API, PATH_GENERAL_RESULTSET, 'q_databases', '']);
 
     pyPrc.stdout.on('data', (result) => {
         console.log(result)

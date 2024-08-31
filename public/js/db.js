@@ -1,12 +1,12 @@
 // Listar os bancos do Sybase
-fetch('/json/bancos.json')
+fetch("/sybase-db")
     .then((data) => data.json())
     .then((json) => {
         for (const db of json) {
             const database = document.createElement("div");
             database.innerHTML = databaseHTML.replaceAll(":name:", db.name);
             document.querySelector("#idSybase").appendChild(database);
-            fetch(`/json/${db.name}.json`)
+            fetch(`/sybase-db/${db.name}`)
                 .then((data) => data.json())
                 .then((json) => {
                     for (const tb of json) {
