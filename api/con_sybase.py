@@ -20,6 +20,12 @@ def create_cursor(query):
 def write_to_json(results):
     json_result = json.dumps(results, indent=4, default=str)
 
+    with open(sys.argv[1], "w") as outfile:
+        outfile.write(json_result)
+
+def stdout_json(results):
+    json_result = json.dumps(results, indent=4, default=str)
+
     print(json_result)
 
 def convert_rows_to_dict(rows, columns):
@@ -31,7 +37,7 @@ def convert_rows_to_dict(rows, columns):
     return results
     
 def q_databases():
-    query= f"exec sp_bancos"
+    query= f"EXEC sp_bancos"
     cursor = create_cursor(query)
 
     columns = [column[0] for column in cursor.description]

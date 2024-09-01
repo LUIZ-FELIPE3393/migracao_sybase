@@ -35,65 +35,19 @@ app.get("/json/:filename", (req, res) => {
     })
 });
 
-/*function inserirTabela(banco, table) {
-    let pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_list_columns', banco, table]);
-    
-    pyPrc.stdout.on('data', (result) => {
-        console.log(result);
+function inserirTabela(banco, table) {
+    let pyPrc = spawnSync('python', ['./api/con_sybase.py', './json/columns.json', 'q_list_columns', banco, table]);
 
-        // Insere tabela no banco
-        pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'create_table', banco, table]);
-
-        pyPrc.stdout.on('data', (result) => {
-            console.log(result);
-
-            // Puxa dados da tabela pro resultset.json
-            pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_select_all_from_table', banco, table]);
-
-            pyPrc.stdout.on('data', (result) => {
-                console.log(result);
-
-                // Insere dados da tabela no banco
-                pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'insert_data', banco, table]);
-            })
-        })
-    })
-}*/
-
-function inserirTabela(banco, table) { // TESTE
-    fetch('/json/funcionario_c').then(data => data.json()).then(json => {
-        writeFile('/api/resultset.json', JSON.stringify(json))
-
-        pyPrc = spawn('python', [PATH_MYSQL_API, PATH_GENERAL_RESULTSET, 'create_table', banco, table]);
-
-        pyPrc.stdout.on('data', (result) => {
-
-        })
+    let tables = pyPrc.stdout?.toString()?.trim();
+    pyPrc.stderr.on('error', (error) => {
+        throw Error(error);
     })
 
-    // Puxa tabelas para o json
-    let pyPrc = spawn('python', [PATH_SYBASE_API, PATH_TABLE_RESULTSET, 'q_list_columns', banco, table]);
-    
-    pyPrc.stdout.on('data', (result) => {
-        console.log(result);
+    pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'create_table', banco, table]);
 
-        // Insere tabela no banco
-        pyPrc = spawn('python', [PATH_MYSQL_API, PATH_TABLE_RESULTSET, 'create_table', banco, table]);
+    pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_select_all_from_table', banco, table]);
 
-        pyPrc.stdout.on('data', (result) => {
-            console.log(result);
-
-            // Puxa dados da tabela pro data.json
-            pyPrc = spawn('python', [PATH_SYBASE_API, PATH_DATA_RESULTSET, 'q_select_all_from_table', banco, table]);
-
-            pyPrc.stdout.on('data', (result) => {
-                console.log(result);
-
-                // Insere dados da tabela no banco
-                pyPrc = spawn('python', [PATH_MYSQL_API, PATH_DATA_RESULTSET, 'insert_data', banco, table]);
-            })
-        })
-    })
+    pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'insert_data', banco, table]);
 }
 
 function criarBanco(banco) {
@@ -106,7 +60,12 @@ app.post("/migrar", (req, res) => {
     for (const table in req.body){
         criarBanco(req.body[table])
         console.log(table, req.body[table])
-        inserirTabela(table, req.body[table])
+        try {
+            inserirTabela(table, req.body[table])
+        } catch (error) {
+            console.error("Erro durante a migração dos banco:", error);
+        }
+        
     }
 })
 
