@@ -226,11 +226,14 @@ app.get("/sybase-db/:database", async (req, res) => {
 
 app.get("/sybase-db", async (req, res) => {
     // Rota lista os bancos do Sybase
-    const pyPrc = await spa('python', [PATH_SYBASE_API, PATH_GENERAL_RESULTSET, 'q_databases', '']);
+    const pyPrc = spawnSync('python', [PATH_SYBASE_API, PATH_GENERAL_RESULTSET, 'q_databases', '']);
 
-    pyPrc.stdout.on('data', (result) => {
-        console.log(result)
+    const result = pyPrc.stdout?.toString()?.trim();
+    const error = pyPrc.stderr?.toString()?.trim();
 
+    console.log(result);
+
+    if(result === "OK") {
         try {
             readFile(PATH_GENERAL_RESULTSET, (err, data) => {
                 if(err) {
@@ -245,9 +248,5 @@ app.get("/sybase-db", async (req, res) => {
         } catch (error) {
             console.error(error);
         }
-    })
-
-    pyPrc.stderr.on('error', (error) => {
-        console.error(error);
-    })
+    }
 });
