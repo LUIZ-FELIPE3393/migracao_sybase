@@ -195,33 +195,17 @@ app.get("/sybase-db/:database/:table", (req, res) => {
     }) 
 });
 
-app.get("/sybase-db/:database", async (req, res) => {
+app.get("/sybase-db/:database", (req, res) => {
     // Rota retorna tabelas de um banco
-    const pyPrc = await spawn('python', [PATH_SYBASE_API, PATH_GENERAL_RESULTSET, 'q_list_tables', req.params.database]);
+    const pyPrc = spawnSync('python', [PATH_SYBASE_API, PATH_GENERAL_RESULTSET, 'q_list_tables', req.params.database]);
 
-    pyPrc.stdout.on('data', (result) => {
-        console.log(result)
+    const result = pyPrc.stdout?.toString()?.trim();
+    const error = pyPrc.stderr?.toString()?.trim();
 
-        try {
-            readFile(PATH_GENERAL_RESULTSET, (err, data) => {
-                if(err) {
-                    console.error(err);
-                    throw err;
-                }
-                const resultParsed = JSON.parse(data?.toString());
-                console.log(req.params.database);
-                console.log(resultParsed);
-                return res.json(resultParsed);
-            });
-            
-        } catch (error) {
-            console.error(error);
-        }
-    })
+    console.log(JSON.parse(result));
+    console.error(error);
 
-    pyPrc.stderr.on('error', (error) => {
-        console.error(error);
-    }) 
+    return res.json(JSON.parse(result));
 })
 
 app.get("/sybase-db", async (req, res) => {
@@ -232,21 +216,7 @@ app.get("/sybase-db", async (req, res) => {
     const error = pyPrc.stderr?.toString()?.trim();
 
     console.log(result);
+    console.error(error);
 
-    if(result === "OK") {
-        try {
-            readFile(PATH_GENERAL_RESULTSET, (err, data) => {
-                if(err) {
-                    console.error(err);
-                    throw err;
-                }
-                const resultParsed = JSON.parse(data?.toString());
-                console.log(resultParsed);
-                return res.json(resultParsed);
-            });
-            
-        } catch (error) {
-            console.error(error);
-        }
-    }
+    return res.json(JSON.parse(result));
 });

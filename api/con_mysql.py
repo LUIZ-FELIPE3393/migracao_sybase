@@ -33,6 +33,7 @@ def create_table( db_name, table_name ):
     mycursor = mydb.cursor()
 
     columns = []
+    primary_keys = []
 
     for i in data:
         column = ""
@@ -51,7 +52,11 @@ def create_table( db_name, table_name ):
             case _:
                 column = f"{i["name"]} VARCHAR(64)"
 
-        columns.append(column)
+        columns.append(column)   
+        if i["pk"] == "YES":
+            primary_keys.append(i["name"])
+
+    columns.append(f"PRIMARY KEY ({'%s' % ', '.join(map(str, primary_keys))})")
 
     print(f"CREATE TABLE {table_name} ({'%s' % ', '.join(map(str, columns))})")
 
