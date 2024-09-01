@@ -1,24 +1,23 @@
 // Listar os bancos do Sybase
 fetch("/sybase-db")
     .then((data) => data.json())
-    .then((json) => {
-        for (const db of json) {
+    .then(async (databases) => {
+        for (const db of databases) {
             const database = document.createElement("div");
             database.innerHTML = databaseHTML.replaceAll(":name:", db.name);
             document.querySelector("#idSybase").appendChild(database);
-            fetch(`/sybase-db/${db.name}`)
+            await fetch(`/sybase-db/${db.name}`)
                 .then((data) => data.json())
-                .then((json) => {
-                    for (const tb of json) {
-                        console.log(json)
+                .then((tables) => {
+                    console.log(tables)
+
+                    for (const tb of tables) {
                         const table = document.createElement("div");
                         table.innerHTML = tableHTML.replaceAll(":name:", tb.name).replaceAll(":database:", db.name);
                         document.querySelector("#"+db.name).appendChild(table);
                     }
-                });
+                });   
         }
-
-        console.log(json);
     });
 
 const tableHTML = `

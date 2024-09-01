@@ -35,33 +35,36 @@ app.get("/json/:filename", (req, res) => {
     })
 });
 
-function inserirTabela(banco, table) {
+async function inserirTabela(banco, table) {
     let pyPrc = spawnSync('python', ['./api/con_sybase.py', './json/columns.json', 'q_list_columns', banco, table]);
 
-    let tables = pyPrc.stdout?.toString()?.trim();
     pyPrc.stderr.on('error', (error) => {
         throw Error(error);
     })
 
-    pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'create_table', banco, table]);
+    pyPrc = spawnSync('python', ['./api/con_sybase.py', './json/constraints.json', 'q_related_tables', banco, table]);
+
+    pyPrc = spawnSync('python', ['./api/con_mysql.py', './json/columns.json', 'create_table', banco, table, './json/constraints.json']);
+
+    /*pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'create_table', banco, table]);
 
     pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_select_all_from_table', banco, table]);
 
-    pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'insert_data', banco, table]);
+    pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'insert_data', banco, table]);*/
 }
 
 function criarBanco(banco) {
     spawn('python', [PATH_MYSQL_API, PATH_GENERAL_RESULTSET, 'create_schema', banco]);
 }
 
-app.post("/migrar", (req, res) => {
+app.post("/migrar", async (req, res) => {
     // Rota da migração
 
     for (const table in req.body){
         criarBanco(req.body[table])
         console.log(table, req.body[table])
         try {
-            inserirTabela(table, req.body[table])
+            await inserirTabela(table, req.body[table])
         } catch (error) {
             console.error("Erro durante a migração dos banco:", error);
         }
@@ -161,8 +164,10 @@ app.get("/sybase-db/:database", (req, res) => {
     const result = pyPrc.stdout?.toString()?.trim();
     const error = pyPrc.stderr?.toString()?.trim();
 
-    console.log(JSON.parse(result));
     console.error(error);
+    if (error) {
+        return res.status(500).send("Problema interno com script python:", error)
+    }
 
     return res.json(JSON.parse(result));
 })
@@ -174,8 +179,10 @@ app.get("/sybase-db", async (req, res) => {
     const result = pyPrc.stdout?.toString()?.trim();
     const error = pyPrc.stderr?.toString()?.trim();
 
-    console.log(result);
     console.error(error);
+    if (error) {
+        return res.status(500).send("Problema interno com script python:", error)
+    }
 
     return res.json(JSON.parse(result));
 });
