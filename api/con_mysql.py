@@ -64,11 +64,12 @@ def create_table( db_name, table_name, constraints_file ):
     for i in constraints:
         if i["relation"] == "ref":
             print(f"FOREIGN KEY ({i["fk"]}) REFERENCES {i["ref_table"]}({i["pk"]});")
+            columns.append(f"FOREIGN KEY ({i["fk"]}) REFERENCES {i["ref_table"]}({i["pk"]})")
 
 
     print(f"CREATE TABLE {table_name} ({'%s' % ', '.join(map(str, columns))})")
 
-    mycursor.execute(f"CREATE TABLE {table_name} ({'%s' % ', '.join(map(str, columns))})")
+    mycursor.execute(f"CREATE TABLE IF NOT EXISTS {table_name} ({'%s' % ', '.join(map(str, columns))})")
 
     mydb.commit()
     mydb.close()

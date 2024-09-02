@@ -49,7 +49,7 @@ def q_databases():
     conn.close()
 
 def q_list_tables(database):
-    qury= f"EXEC sp_list_tables_from_db {database}"
+    query= f"EXEC sp_list_tables_from_db {database}"
     cursor = create_cursor(query)
 
     columns = [column[0] for column in cursor.description]

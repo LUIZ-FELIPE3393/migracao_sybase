@@ -35,16 +35,29 @@ app.get("/json/:filename", (req, res) => {
     })
 });
 
-async function inserirTabela(banco, table) {
+function inserirTabela(banco, table) {
     let pyPrc = spawnSync('python', ['./api/con_sybase.py', './json/columns.json', 'q_list_columns', banco, table]);
-
-    pyPrc.stderr.on('error', (error) => {
-        throw Error(error);
-    })
+    let error = pyPrc.stderr?.toString()?.trim();
+    if (error) {
+        console.error(error);
+        throw Error("Erro na migração:", error);
+    }
 
     pyPrc = spawnSync('python', ['./api/con_sybase.py', './json/constraints.json', 'q_related_tables', banco, table]);
+    error = pyPrc.stderr?.toString()?.trim();
+    if (error) {
+        console.error(error);
+        throw Error("Erro na migração:", error);
+    }
 
     pyPrc = spawnSync('python', ['./api/con_mysql.py', './json/columns.json', 'create_table', banco, table, './json/constraints.json']);
+    error = pyPrc.stderr?.toString()?.trim();
+    if (error) {
+        console.error(error);
+        throw Error("Erro na migração:", error);
+    }
+
+    console.log("Migração bem sucedida");
 
     /*pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'create_table', banco, table]);
 
@@ -57,19 +70,21 @@ function criarBanco(banco) {
     spawn('python', [PATH_MYSQL_API, PATH_GENERAL_RESULTSET, 'create_schema', banco]);
 }
 
-app.post("/migrar", async (req, res) => {
+app.post("/migrar-sybase", async (req, res) => {
     // Rota da migração
 
-    for (const table in req.body){
-        criarBanco(req.body[table])
-        console.log(table, req.body[table])
+    console.log(req.body);
+
+    req.body.slice().reverse().forEach(table => {
+        console.log(table);
+        criarBanco(table["database"]);
         try {
-            await inserirTabela(table, req.body[table])
+            inserirTabela(table["database"], table["table"])
         } catch (error) {
             console.error("Erro durante a migração dos banco:", error);
-        }
-        
-    }
+            return res.send(500).send("Erro durante a migração dos banco:" + error);
+        } 
+    });
 })
 
 app.post("/mysql-db/insere-dados/:database/:table", (req, res) => {
@@ -131,6 +146,21 @@ app.post("/mysql-db/novo-banco/:database", (req, res) => {
     spawn('python', [PATH_MYSQL_API, PATH_GENERAL_RESULTSET, 'create_schema', req.params.database]);
 });
 
+app.post("/sybase-db/:database/:table", (req, res) => {
+    // Mostra as tabelas referenciadas pela tabela fornecida
+    const pyPrc = spawnSync('python', [PATH_SYBASE_API, PATH_GENERAL_RESULTSET, 'q_related_tables', req.params.database, req.params.table]);
+
+    const result = pyPrc.stdout?.toString()?.trim();
+    const error = pyPrc.stderr?.toString()?.trim();
+
+    console.error(error);
+    if (error) {
+        return res.status(500).send("Problema interno com script python: " + error)
+    }
+
+    return res.json(JSON.parse(result));
+})
+
 app.get("/sybase-db/:database/:table", (req, res) => {
     const pyPrc = spawn('python', [PATH_SYBASE_API, PATH_GENERAL_RESULTSET, 'q_list_tables', req.params.database, req.params.table]);
 
@@ -166,7 +196,7 @@ app.get("/sybase-db/:database", (req, res) => {
 
     console.error(error);
     if (error) {
-        return res.status(500).send("Problema interno com script python:", error)
+        return res.status(500).send("Problema interno com script python: " + error)
     }
 
     return res.json(JSON.parse(result));
@@ -181,7 +211,7 @@ app.get("/sybase-db", async (req, res) => {
 
     console.error(error);
     if (error) {
-        return res.status(500).send("Problema interno com script python:", error)
+        return res.status(500).send("Problema interno com script python: " + error)
     }
 
     return res.json(JSON.parse(result));
