@@ -16,12 +16,6 @@ body {
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-/* style da section do meio*/
-#idMeio{
-    text-align: center;
-    margin-top: 7%;
-}
-
 /* style da section dos bancos*/
 #idMysql, #idSybase {
     margin: 20px 0;
@@ -33,4 +27,8 @@ body {
 
 h2, h3 {
     color: #333;
+}
+
+#idTopbox{
+    text-align: center;
 }

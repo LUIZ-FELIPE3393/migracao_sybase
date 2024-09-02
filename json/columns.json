@@ -1,6 +1,6 @@
 [
     {
-        "name": "vencodigo",
+        "name": "clicodigo",
         "length": 4,
         "type": 56,
         "prec": null,
@@ -8,15 +8,31 @@
         "pk": "YES"
     },
     {
-        "name": "vendata",
-        "length": 4,
-        "type": 49,
+        "name": "clisexo",
+        "length": 1,
+        "type": 47,
         "prec": null,
         "scale": null,
         "pk": "NO"
     },
     {
-        "name": "venfilcodigo",
+        "name": "clirendamensal",
+        "length": 4,
+        "type": 63,
+        "prec": 6,
+        "scale": 2,
+        "pk": "NO"
+    },
+    {
+        "name": "clinome",
+        "length": 60,
+        "type": 39,
+        "prec": null,
+        "scale": null,
+        "pk": "NO"
+    },
+    {
+        "name": "clibaicodigo",
         "length": 4,
         "type": 56,
         "prec": null,
@@ -24,7 +40,15 @@
         "pk": "NO"
     },
     {
-        "name": "venclicodigo",
+        "name": "clifone",
+        "length": 10,
+        "type": 39,
+        "prec": null,
+        "scale": null,
+        "pk": "NO"
+    },
+    {
+        "name": "cliestcodigo",
         "length": 4,
         "type": 56,
         "prec": null,
@@ -32,9 +56,17 @@
         "pk": "NO"
     },
     {
-        "name": "venfuncodigo",
+        "name": "clidtcadastro",
         "length": 4,
-        "type": 56,
+        "type": 123,
+        "prec": null,
+        "scale": null,
+        "pk": "NO"
+    },
+    {
+        "name": "clidtdesativacao",
+        "length": 4,
+        "type": 123,
         "prec": null,
         "scale": null,
         "pk": "NO"

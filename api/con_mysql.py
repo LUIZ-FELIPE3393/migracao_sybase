@@ -6,6 +6,14 @@ host="localhost"
 user="root"
 password="5286"
 
+def write_to_json(results):
+    json_result = json.dumps(results, indent=4, default=str)
+
+    with open(sys.argv[1], "w") as outfile:
+        outfile.write(json_result)
+
+    print(json_result)
+
 def create_schema( db_name ):
     mydb = mysql.connector.connect(
         host=host,
@@ -95,6 +103,101 @@ def insert_data( db_name, table_name ):
     mydb.commit()     
     mydb.close()
 
+def q_databases():
+    mydb = mysql.connector.connect(
+        host=host,
+        user=user,
+        password=password
+    )
+
+    mycursor = mydb.cursor(dictionary=True)
+    mycursor.execute("CALL procedures.listar_bancos")
+
+    rows = mycursor.fetchall() 
+    results = []
+    for row in rows:
+        results.append(row)
+
+    write_to_json(results)
+
+    mydb.close()
+
+def q_list_tables(database):
+    mydb = mysql.connector.connect(
+        host=host,
+        user=user,
+        password=password
+    )
+
+    mycursor = mydb.cursor(dictionary=True)
+    mycursor.execute(f"CALL procedures.listar_tabelas('{database}')")
+
+    rows = mycursor.fetchall() 
+    results = []
+    for row in rows:
+        results.append(row)
+
+    write_to_json(results)
+
+    mydb.close()
+
+def q_list_columns (database, table):
+    mydb = mysql.connector.connect(
+        host=host,
+        user=user,
+        password=password
+    )
+
+    mycursor = mydb.cursor(dictionary=True)
+    mycursor.execute(f"CALL procedures.listar_colunas('{database}', '{table}')")
+
+    rows = mycursor.fetchall() 
+    results = []
+    for row in rows:
+        results.append(row)
+
+    write_to_json(results)
+
+    mydb.close()
+
+def q_related_tables(database, table):
+    mydb = mysql.connector.connect(
+        host=host,
+        user=user,
+        password=password
+    )
+
+    mycursor = mydb.cursor(dictionary=True)
+    mycursor.execute(f"CALL procedures.listar_referencias('{database}', '{table}')")
+
+    rows = mycursor.fetchall() 
+    results = []
+    for row in rows:
+        results.append(row)
+
+    write_to_json(results)
+
+    mydb.close()
+
+def q_select_all_from_table(database, table):
+    mydb = mysql.connector.connect(
+        host=host,
+        user=user,
+        password=password
+    )
+
+    mycursor = mydb.cursor(dictionary=True)
+    mycursor.execute(f"SELECT * FROM {database}.{table}")
+
+    rows = mycursor.fetchall() 
+    results = []
+    for row in rows:
+        results.append(row)
+
+    write_to_json(results)
+
+    mydb.close()
+
 
 # Match for functions below
 match sys.argv[2]:
@@ -104,3 +207,13 @@ match sys.argv[2]:
         create_table(sys.argv[3], sys.argv[4], sys.argv[5])
     case 'insert_data':
         insert_data(sys.argv[3], sys.argv[4])
+    case 'q_databases':
+        q_databases()
+    case 'q_list_tables':
+        q_list_tables(sys.argv[3])
+    case 'q_list_columns':
+        q_list_columns(sys.argv[3], sys.argv[4])
+    case 'q_related_tables':
+        q_related_tables(sys.argv[3], sys.argv[4])
+    case 'q_select_all_from_table':
+        q_select_all_from_table(sys.argv[3], sys.argv[4])

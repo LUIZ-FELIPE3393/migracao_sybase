@@ -5,8 +5,8 @@ import simplejson as json
 user = "sa" 
 passwd = "123456"
 # host = "" #Carlos 
-# host = "192.168.1.35" #Luiz Felipe
-host = "25.3.28.238" #Luiz - Hamachi
+host = "192.168.1.35" #Luiz Felipe
+# host = "25.3.28.238" #Luiz - Hamachi
 db = "master"
 port = "5000"
 driver="Devart ODBC Driver for ASE"
@@ -33,6 +33,71 @@ def convert_rows_to_dict(rows, columns):
     
     return results
     
+def create_database(db_name):
+    conn.execute("CREATE DATABASE " + db_name)
+    conn.close()
+
+
+def create_table(db_name, table_name, constraints_file):
+    tb_file = open(sys.argv[1])
+    cnst_file = open(constraints_file)
+    tables = json.load(tb_file)
+    constraints = json.load(cnst_file)
+
+    cursor = conn.cursor()
+
+    columns = []
+    primary_keys = []
+
+    for i in tables:
+        column = ""
+
+        match (i["type"]):
+            case "int":
+                column = f"{i["name"]} INT"
+            case "decimal":
+                column = f"{i["name"]} DOUBLE({i["prec"]}, {i["scale"]})"
+            case "char":
+                column = f"{i["name"]} CHAR"
+            case "date":
+                column = f"{i["name"]} DATE"
+            case "varchar":
+                column = f"{i["name"]} VARCHAR({i["length"]})"
+            case _:
+                column = f"{i["name"]} VARCHAR(64)"
+
+        columns.append(column)   
+        if i["pk"] == "YES":
+            primary_keys.append(i["name"])
+
+    columns.append(f"PRIMARY KEY ({'%s' % ', '.join(map(str, primary_keys))})")
+
+    for i in constraints:
+        if i["relation"] == "ref":
+            print(f"FOREIGN KEY ({i["fk"]}) REFERENCES {i["ref_table"]}({i["pk"]});")
+            columns.append(f"FOREIGN KEY ({i["fk"]}) REFERENCES {i["ref_table"]}({i["pk"]})")
+
+    print(f"CREATE TABLE {db_name}.dbo.{table_name} ({'%s' % ', '.join(map(str, columns))})")
+    cursor.execute(f"CREATE TABLE {db_name}.dbo.{table_name} ({'%s' % ', '.join(map(str, columns))})")
+
+    conn.close()
+
+def insert_data(db_name, table_name):  
+    file = open(sys.argv[1])
+    data = json.load(file)
+
+    cursor = conn.cursor()
+
+    print(data)
+
+    for i in data:
+        value_list = list(i.values())
+        print(f"INSERT INTO {db_name}.dbo.{table_name} VALUES ({str(value_list).replace('[', '').replace(']', '').replace('None', 'null')});")
+        cursor.execute(f"INSERT INTO {db_name}.dbo.{table_name} VALUES ({str(value_list).replace('[', '').replace(']', '').replace('None', 'null')});")
+
+    conn.close()
+
+
 def q_databases():
     query= f"EXEC sp_bancos"
     cursor = create_cursor(query)
@@ -98,6 +163,12 @@ def q_select_all_from_table(database, table):
 
 # Match for functions below
 match sys.argv[2]:
+    case 'create_database':
+        create_database(sys.argv[3])
+    case 'create_table':
+        create_table(sys.argv[3], sys.argv[4], sys.argv[5])
+    case 'insert_data':
+        insert_data(sys.argv[3], sys.argv[4])
     case 'q_databases':
         q_databases()
     case 'q_list_tables':
@@ -108,3 +179,5 @@ match sys.argv[2]:
         q_related_tables(sys.argv[3], sys.argv[4])
     case 'q_select_all_from_table':
         q_select_all_from_table(sys.argv[3], sys.argv[4])
+    case _:
+        print("Rota não encontrada")

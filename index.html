@@ -22,14 +22,84 @@
         </div>
     </div>
 
-    <!--Section do Sybase-->
-    <form id="sybase-form" class="row" method="post">
-        <!--Section do meio-->
-        <div class="col" id="idSybase">
-            <h2 style="color: rgb(159, 255, 172); font-weight: bold;">Sybase</h2>
+    <!-- Seção de migração -->
+    <div id="section" class="row">
+        <!-- Seção do Sybase -->
+        <div id="idSybase" class="col-6">
+            <form id="sybase-form">
+
+                <!-- Seção do formulário superior -->
+                <div id="idTopbox">
+                    <h3><b>Sybase</b></h3>
+                    <div id="idForminfo">
+                        <div class="mb-3 mt-3">
+                            <input type="text" id="idServer" placeholder="Server" name="Server">
+                            <input type="text" id="idUsuario" placeholder="Usuário" name="Usuario"><br>
+                         </div>
+                        <div class="mb-3 mt-3">
+                            <input type="text" id="idPorta" placeholder="Porta" name="Porta">
+                            <input type="password" id="idSenha" placeholder="Senha" name="Senha"><br><hr>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção de bancos e suas tabelas -->
+                <div id="idFormbnc">
+                    
+                </div>
+                
+                <!-- Seção de destino -->
+                <div id="idDestino">
+                    <form>
+                        <div class="mb-3 mt-3">
+                            <hr><input type="text" id="idBncDestino" placeholder="Banco de destino" name="Banco destino"><br><br>
+                            <input class="form-check-input" type="checkbox" id="check2" name="option2" value="something">
+                            <label for="check2"> Migrar dados</label><br><br>
+                            <button type="submit" class="btn btn-success">Migrar</button>
+                        </div>
+                    </form>
+                </div>
+            </form>
         </div>
-        <button type="submit" class="btn btn-success">Migrar</button>
-    </form>
-    <script src="/js/db.js"></script>
+
+        <!-- Seção do MySQL -->
+        <div id="idMysql" class="col-6">
+            <form id="mysql-form">
+
+                <!-- Seção do formulário superior -->
+                <div id="idTopbox">
+                    <h3><b>MySQL</b></h3>
+                    <div id="idForminfo">
+                            <div class="mb-3 mt-3">
+                                <input type="text" id="idServer" placeholder="Server" name="Server">
+                                <input type="text" id="idUsuario" placeholder="Usuário" name="Usuario"><br>
+                            </div>
+                            <div class="mb-3 mt-3">
+                                <input type="text" id="idPorta" placeholder="Porta" name="Porta">
+                                <input type="password" id="idSenha" placeholder="Senha" name="Senha"><br><hr>
+                            </div>
+                    </div>
+                </div>
+
+                <!-- Seção de bancos e suas tabelas -->
+                <div id="idFormbnc">
+                    
+                </div>
+
+                <!-- Seção de destino -->
+                <div id="idDestino">
+                    <div class="mb-3 mt-3">
+                        <hr><input type="text" id="idBncDestino" placeholder="Banco de destino" name="Banco destino"><br><br>
+                        <input class="form-check-input" type="checkbox" id="check9" name="option2" value="something">
+                        <label for="check9"> Migrar dados</label><br><br>
+                        <button type="submit" class="btn btn-success">Migrar</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <script src="/js/sybase_db.js"></script>
+    <script src="/js/mysql_db.js"></script>
 </body>
 </html>
