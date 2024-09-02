@@ -4,9 +4,7 @@ import simplejson as json
 
 user = "sa" 
 passwd = "123456"
-# host = "" #Carlos 
-host = "192.168.1.35" #Luiz Felipe
-# host = "25.3.28.238" #Luiz - Hamachi
+host = "192.168.56.101" #Carlos 
 db = "master"
 port = "5000"
 driver="Devart ODBC Driver for ASE"

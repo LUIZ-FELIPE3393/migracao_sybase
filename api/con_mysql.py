@@ -4,7 +4,7 @@ import sys
 
 host="localhost"
 user="root"
-password="5286"
+password="root"
 
 def write_to_json(results):
     json_result = json.dumps(results, indent=4, default=str)
