@@ -23,9 +23,25 @@ mysqlForm.addEventListener("submit", (event) => {
         body: JSON.stringify(tablesInMigrationSybase)})
         .then(response => {
             console.log(response);
+            document.querySelector("#console").textContent = response.status + " : " + response.statusText;
             mysqlForm.querySelector("button[type='submit']").removeAttribute("disabled");
         })
 })
+
+function unblockAllTablesMysql(database) {
+    sybaseForm.querySelector("button[type='submit']").removeAttribute("disabled");
+    for (const table of document.querySelector(`#MYSQL_${database}`).querySelectorAll("input")) {
+        if(table.getAttribute("ref") !== "true")
+            table.removeAttribute("disabled");
+    }
+}
+
+function blockAllTablesMysql(database) {
+    sybaseForm.querySelector("button[type='submit']").setAttribute("disabled", "");
+    for (const table of document.querySelector(`#MYSQL_${database}`).querySelectorAll("input")) {
+        table.setAttribute("disabled", "");
+    }
+}
 
 async function changetablesInMigrationMySQL(database, table, checked) {
     await fetch(`/mysql-db/${database}/${table}`, {method: "POST"})
@@ -39,14 +55,14 @@ async function changetablesInMigrationMySQL(database, table, checked) {
 
             for (const ref of references) {
                 if (checked === true) {
-                    document.querySelector(`#${ref.ref_table}`).checked = true;
+                    mysqlForm.querySelector(`#${ref.ref_table}`).checked = true;
                     if (table !== ref.ref_table) {
                         console.log(table, ref.ref_table);
-                        document.querySelector(`#${ref.ref_table}`).setAttribute("ref", "true");
+                        mysqlForm.querySelector(`#${ref.ref_table}`).setAttribute("ref", "true");
                         await changetablesInMigrationMySQL(database, ref.ref_table, true);
                     }
                 } else {
-                    document.querySelector(`#${ref.ref_table}`).removeAttribute("ref");
+                    mysqlForm.querySelector(`#${ref.ref_table}`).removeAttribute("ref");
                     tablesInMigrationSybase.splice(tablesInMigrationSybase.indexOf({table: ref.ref_table, database: database}), 1);
                 }
             }
@@ -72,13 +88,13 @@ fetch("/mysql-db")
                         document.querySelector("#MYSQL_"+db.name).appendChild(table);
                         table.querySelector("input")
                             .addEventListener("click", async () => {
-                                blockAllTables(db.name);
+                                blockAllTablesMysql(db.name);
                                 await changetablesInMigrationMySQL (
                                     db.name, 
                                     tb.name,
                                     table.querySelector('input').checked
                                 );
-                                unblockAllTables(db.name);
+                                unblockAllTablesMysql(db.name);
                             })
                     }
                 });   

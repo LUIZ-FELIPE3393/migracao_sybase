@@ -28,7 +28,7 @@ sybaseForm.addEventListener("submit", (event) => {
         })
 })
 
-function unblockAllTables(database) {
+function unblockAllTablesSybase(database) {
     sybaseForm.querySelector("button[type='submit']").removeAttribute("disabled");
     for (const table of document.querySelector(`#SYBASE_${database}`).querySelectorAll("input")) {
         if(table.getAttribute("ref") !== "true")
@@ -36,7 +36,7 @@ function unblockAllTables(database) {
     }
 }
 
-function blockAllTables(database) {
+function blockAllTablesSybase(database) {
     sybaseForm.querySelector("button[type='submit']").setAttribute("disabled", "");
     for (const table of document.querySelector(`#SYBASE_${database}`).querySelectorAll("input")) {
         table.setAttribute("disabled", "");
@@ -99,13 +99,13 @@ fetch("/sybase-db")
                         document.querySelector("#SYBASE_"+db.name).appendChild(table);
                         table.querySelector("input")
                             .addEventListener("click", async () => {
-                                blockAllTables(db.name);
+                                blockAllTablesSybase(db.name);
                                 await changetablesInMigrationSybase (
                                     db.name, 
                                     tb.name,
                                     table.querySelector('input').checked
                                 );
-                                unblockAllTables(db.name);
+                                unblockAllTablesSybase(db.name);
                             })
                     }
                 });   

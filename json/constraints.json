@@ -1,14 +1,1 @@
-[
-    {
-        "ref_table": "bairro",
-        "relation": "ref",
-        "fk": "clibaicodigo",
-        "pk": "baicodigo"
-    },
-    {
-        "ref_table": "estadocivil",
-        "relation": "ref",
-        "fk": "cliestcodigo",
-        "pk": "estcodigo"
-    }
-]
+[]
