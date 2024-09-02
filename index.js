@@ -85,6 +85,8 @@ app.post("/migrar-sybase", async (req, res) => {
             return res.send(500).send("Erro durante a migração dos banco:" + error);
         } 
     });
+
+    return res.status(200).send("Migração bem sucedida")
 })
 
 app.post("/mysql-db/insere-dados/:database/:table", (req, res) => {

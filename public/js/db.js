@@ -3,22 +3,21 @@ const tablesInMigration = [] //Pilha de tabelas que serão migradas
 document.querySelector("#sybase-form").addEventListener("submit", (event) => {
     event.preventDefault();
 
-    //document.querySelector("#sybase-form").querySelector("button[type='submit']").setAttribute("disabled", "");
-    console.log(JSON.stringify(tablesInMigration));
+    document.querySelector("#sybase-form").querySelector("button[type='submit']").setAttribute("disabled", "");
     fetch('/migrar-sybase', {
         method: "POST", 
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(tablesInMigration)})
-        .then(response => response.json())
-        .then(data => {
-            console.log(data)
+        .then(response => {
+            console.log(response);
             document.querySelector("#sybase-form").querySelector("button[type='submit']").removeAttribute("disabled");
         })
 })
 
 function unblockAllTables(database) {
+    document.querySelector("#sybase-form").querySelector("button[type='submit']").removeAttribute("disabled");
     for (const table of document.querySelector(`#${database}`).querySelectorAll("input")) {
         if(table.getAttribute("ref") !== "true")
             table.removeAttribute("disabled");
@@ -26,23 +25,22 @@ function unblockAllTables(database) {
 }
 
 function blockAllTables(database) {
+    document.querySelector("#sybase-form").querySelector("button[type='submit']").setAttribute("disabled", "");
     for (const table of document.querySelector(`#${database}`).querySelectorAll("input")) {
         table.setAttribute("disabled", "");
     }
 }
 
 function pushToMigration(database, table) {
-    //console.log(database, table, tablesInMigration.find((t) => { return t.table === table.table }))
     if (tablesInMigration.find((t) => { return t.table === table}) === undefined) {
         tablesInMigration.push({table: table, database: database});
     }
 }
 
-function changeTablesInMigration(database, table, checked) {
-    blockAllTables(database);
-    fetch(`/sybase-db/${database}/${table}`, {method: "POST"})
+async function changeTablesInMigration(database, table, checked) {
+    await fetch(`/sybase-db/${database}/${table}`, {method: "POST"})
         .then((data) => data.json())
-        .then((references) => {
+        .then(async (references) => {
             if (checked === true) {
                 pushToMigration(database, table);
             } else {
@@ -54,16 +52,16 @@ function changeTablesInMigration(database, table, checked) {
                     document.querySelector(`#${ref.ref_table}`).checked = true;
                     document.querySelector(`#${ref.ref_table}`).setAttribute("disabled", "");
                     document.querySelector(`#${ref.ref_table}`).setAttribute("ref", "true");
-                    changeTablesInMigration(database, ref.ref_table, true);
+                    if (table !== ref.ref_table) {
+                        console.log(table, ref.ref_table);
+                        await changeTablesInMigration(database, ref.ref_table, true);
+                    }
                 } else {
                     document.querySelector(`#${ref.ref_table}`).removeAttribute("disabled");
                     document.querySelector(`#${ref.ref_table}`).removeAttribute("ref");
                     tablesInMigration.splice(tablesInMigration.indexOf({table: ref.ref_table, database: database}), 1);
                 }
             }
-
-            unblockAllTables(database);
-            console.log(tablesInMigration)
         });
 }
 
@@ -85,13 +83,15 @@ fetch("/sybase-db")
                         table.innerHTML = tableHTML.replaceAll(":name:", tb.name).replaceAll(":database:", db.name);
                         document.querySelector("#"+db.name).appendChild(table);
                         table.querySelector("input")
-                            .addEventListener("click", () => {
-                                changeTablesInMigration (
+                            .addEventListener("click", async () => {
+                                blockAllTables(db.name);
+                                await changeTablesInMigration (
                                     db.name, 
                                     tb.name,
                                     table.querySelector('input').checked
-                                )}
-                            )
+                                );
+                                unblockAllTables(db.name);
+                            })
                     }
                 });   
         }
