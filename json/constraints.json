@@ -1,14 +1,20 @@
 [
     {
-        "ref_table": "bairro",
+        "ref_table": "filial",
         "relation": "ref",
-        "fk": "clibaicodigo",
-        "pk": "baicodigo"
+        "fk": "venfilcodigo",
+        "pk": "filcodigo"
     },
     {
-        "ref_table": "estadocivil",
+        "ref_table": "cliente",
         "relation": "ref",
-        "fk": "cliestcodigo",
-        "pk": "estcodigo"
+        "fk": "venclicodigo",
+        "pk": "clicodigo"
+    },
+    {
+        "ref_table": "funcionario",
+        "relation": "ref",
+        "fk": "venfuncodigo",
+        "pk": "funcodigo"
     }
 ]
