@@ -1,0 +1,40 @@
+body {
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+/* style da da header e do footer*/
+#idHeader{
+    background-color: #88b2ff;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* style da section do meio*/
+#idMeio{
+    text-align: center;
+    margin-top: 7%;
+}
+
+/* style da section dos bancos*/
+#idMysql, #idSybase {
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2, h3 {
+    color: #333;
+}
+
+#idTopbox{
+    text-align: center;
+}
