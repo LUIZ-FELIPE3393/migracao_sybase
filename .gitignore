@@ -131,3 +131,6 @@ dist
 
 # Python cache
 ./api/_pycache_
+
+# Json cache
+./json

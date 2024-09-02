@@ -1,6 +1,6 @@
 const express = require('express');
 const http = require('http');
-const { spawn } = require('child_process');
+const { spawn, spawnSync } = require('child_process');
 const { join } = require('path');
 const { readFile, writeFile } = require('fs');
 const path = require('path');
@@ -35,79 +35,56 @@ app.get("/json/:filename", (req, res) => {
     })
 });
 
-/*function inserirTabela(banco, table) {
-    let pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_list_columns', banco, table]);
-    
-    pyPrc.stdout.on('data', (result) => {
-        console.log(result);
+function inserirTabela(banco, table) {
+    let pyPrc = spawnSync('python', ['./api/con_sybase.py', './json/columns.json', 'q_list_columns', banco, table]);
+    let error = pyPrc.stderr?.toString()?.trim();
+    if (error) {
+        console.error(error);
+        throw Error("Erro na migração:", error);
+    }
 
-        // Insere tabela no banco
-        pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'create_table', banco, table]);
+    pyPrc = spawnSync('python', ['./api/con_sybase.py', './json/constraints.json', 'q_related_tables', banco, table]);
+    error = pyPrc.stderr?.toString()?.trim();
+    if (error) {
+        console.error(error);
+        throw Error("Erro na migração:", error);
+    }
 
-        pyPrc.stdout.on('data', (result) => {
-            console.log(result);
+    pyPrc = spawnSync('python', ['./api/con_mysql.py', './json/columns.json', 'create_table', banco, table, './json/constraints.json']);
+    error = pyPrc.stderr?.toString()?.trim();
+    if (error) {
+        console.error(error);
+        throw Error("Erro na migração:", error);
+    }
 
-            // Puxa dados da tabela pro resultset.json
-            pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_select_all_from_table', banco, table]);
+    console.log("Migração bem sucedida");
 
-            pyPrc.stdout.on('data', (result) => {
-                console.log(result);
+    /*pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'create_table', banco, table]);
 
-                // Insere dados da tabela no banco
-                pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'insert_data', banco, table]);
-            })
-        })
-    })
-}*/
+    pyPrc = spawn('python', ['./api/con_sybase.py', './api/resultset.json', 'q_select_all_from_table', banco, table]);
 
-function inserirTabela(banco, table) { // TESTE
-    fetch('/json/funcionario_c').then(data => data.json()).then(json => {
-        writeFile('/api/resultset.json', JSON.stringify(json))
-
-        pyPrc = spawn('python', [PATH_MYSQL_API, PATH_GENERAL_RESULTSET, 'create_table', banco, table]);
-
-        pyPrc.stdout.on('data', (result) => {
-
-        })
-    })
-
-    // Puxa tabelas para o json
-    let pyPrc = spawn('python', [PATH_SYBASE_API, PATH_TABLE_RESULTSET, 'q_list_columns', banco, table]);
-    
-    pyPrc.stdout.on('data', (result) => {
-        console.log(result);
-
-        // Insere tabela no banco
-        pyPrc = spawn('python', [PATH_MYSQL_API, PATH_TABLE_RESULTSET, 'create_table', banco, table]);
-
-        pyPrc.stdout.on('data', (result) => {
-            console.log(result);
-
-            // Puxa dados da tabela pro data.json
-            pyPrc = spawn('python', [PATH_SYBASE_API, PATH_DATA_RESULTSET, 'q_select_all_from_table', banco, table]);
-
-            pyPrc.stdout.on('data', (result) => {
-                console.log(result);
-
-                // Insere dados da tabela no banco
-                pyPrc = spawn('python', [PATH_MYSQL_API, PATH_DATA_RESULTSET, 'insert_data', banco, table]);
-            })
-        })
-    })
+    pyPrc = spawn('python', ['./api/con_mysql.py', './api/resultset.json', 'insert_data', banco, table]);*/
 }
 
 function criarBanco(banco) {
     spawn('python', [PATH_MYSQL_API, PATH_GENERAL_RESULTSET, 'create_schema', banco]);
 }
 
-app.post("/migrar", (req, res) => {
+app.post("/migrar-sybase", async (req, res) => {
     // Rota da migração
 
-    for (const table in req.body){
-        criarBanco(req.body[table])
-        console.log(table, req.body[table])
-        inserirTabela(table, req.body[table])
-    }
+    console.log(req.body);
+
+    req.body.slice().reverse().forEach(table => {
+        console.log(table);
+        criarBanco(table["database"]);
+        try {
+            inserirTabela(table["database"], table["table"])
+        } catch (error) {
+            console.error("Erro durante a migração dos banco:", error);
+            return res.send(500).send("Erro durante a migração dos banco:" + error);
+        } 
+    });
 })
 
 app.post("/mysql-db/insere-dados/:database/:table", (req, res) => {
@@ -169,6 +146,21 @@ app.post("/mysql-db/novo-banco/:database", (req, res) => {
     spawn('python', [PATH_MYSQL_API, PATH_GENERAL_RESULTSET, 'create_schema', req.params.database]);
 });
 
+app.post("/sybase-db/:database/:table", (req, res) => {
+    // Mostra as tabelas referenciadas pela tabela fornecida
+    const pyPrc = spawnSync('python', [PATH_SYBASE_API, PATH_GENERAL_RESULTSET, 'q_related_tables', req.params.database, req.params.table]);
+
+    const result = pyPrc.stdout?.toString()?.trim();
+    const error = pyPrc.stderr?.toString()?.trim();
+
+    console.error(error);
+    if (error) {
+        return res.status(500).send("Problema interno com script python: " + error)
+    }
+
+    return res.json(JSON.parse(result));
+})
+
 app.get("/sybase-db/:database/:table", (req, res) => {
     const pyPrc = spawn('python', [PATH_SYBASE_API, PATH_GENERAL_RESULTSET, 'q_list_tables', req.params.database, req.params.table]);
 
@@ -197,55 +189,30 @@ app.get("/sybase-db/:database/:table", (req, res) => {
 
 app.get("/sybase-db/:database", (req, res) => {
     // Rota retorna tabelas de um banco
-    const pyPrc = spawn('python', [PATH_SYBASE_API, PATH_GENERAL_RESULTSET, 'q_list_tables', req.params.database]);
+    const pyPrc = spawnSync('python', [PATH_SYBASE_API, PATH_GENERAL_RESULTSET, 'q_list_tables', req.params.database]);
 
-    pyPrc.stdout.on('data', (result) => {
-        console.log(result)
+    const result = pyPrc.stdout?.toString()?.trim();
+    const error = pyPrc.stderr?.toString()?.trim();
 
-        try {
-            readFile(PATH_GENERAL_RESULTSET, (err, data) => {
-                if(err) {
-                    console.error(err);
-                    throw err;
-                }
-                const resultParsed = JSON.parse(data?.toString());
-                return res.json(resultParsed);
-            });
-            
-        } catch (error) {
-            console.error(error);
-        }
-    })
+    console.error(error);
+    if (error) {
+        return res.status(500).send("Problema interno com script python: " + error)
+    }
 
-    pyPrc.stderr.on('error', (error) => {
-        console.error(error);
-    }) 
+    return res.json(JSON.parse(result));
 })
 
 app.get("/sybase-db", async (req, res) => {
     // Rota lista os bancos do Sybase
-    const pyPrc = spawn('python', [PATH_SYBASE_API, PATH_GENERAL_RESULTSET, 'q_databases', '']);
+    const pyPrc = spawnSync('python', [PATH_SYBASE_API, PATH_GENERAL_RESULTSET, 'q_databases', '']);
 
-    pyPrc.stdout.on('data', (result) => {
-        console.log(result)
+    const result = pyPrc.stdout?.toString()?.trim();
+    const error = pyPrc.stderr?.toString()?.trim();
 
-        try {
-            readFile(PATH_GENERAL_RESULTSET, (err, data) => {
-                if(err) {
-                    console.error(err);
-                    throw err;
-                }
-                const resultParsed = JSON.parse(data?.toString());
-                console.log(resultParsed);
-                return res.json(resultParsed);
-            });
-            
-        } catch (error) {
-            console.error(error);
-        }
-    })
+    console.error(error);
+    if (error) {
+        return res.status(500).send("Problema interno com script python: " + error)
+    }
 
-    pyPrc.stderr.on('error', (error) => {
-        console.error(error);
-    })
+    return res.json(JSON.parse(result));
 });

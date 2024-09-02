@@ -4,7 +4,7 @@ import sys
 
 host="localhost"
 user="root"
-password="root"
+password="5286"
 
 def create_schema( db_name ):
     mydb = mysql.connector.connect(
@@ -20,7 +20,7 @@ def create_schema( db_name ):
 
     mydb.close()
 
-def create_table( db_name, table_name ):
+def create_table( db_name, table_name, constraints_file ):
     mydb = mysql.connector.connect(
         host=host,
         user=user,
@@ -28,13 +28,17 @@ def create_table( db_name, table_name ):
         database=db_name
     )
 
-    f = open(sys.argv[1])
-    data = json.load(f)
+    tb_file = open(sys.argv[1])
+    cnst_file = open(constraints_file)
+    tables = json.load(tb_file)
+    constraints = json.load(cnst_file)
+
     mycursor = mydb.cursor()
 
     columns = []
+    primary_keys = []
 
-    for i in data:
+    for i in tables:
         column = ""
 
         match (i["type"]):
@@ -51,11 +55,21 @@ def create_table( db_name, table_name ):
             case _:
                 column = f"{i["name"]} VARCHAR(64)"
 
-        columns.append(column)
+        columns.append(column)   
+        if i["pk"] == "YES":
+            primary_keys.append(i["name"])
+
+    columns.append(f"PRIMARY KEY ({'%s' % ', '.join(map(str, primary_keys))})")
+
+    for i in constraints:
+        if i["relation"] == "ref":
+            print(f"FOREIGN KEY ({i["fk"]}) REFERENCES {i["ref_table"]}({i["pk"]});")
+            columns.append(f"FOREIGN KEY ({i["fk"]}) REFERENCES {i["ref_table"]}({i["pk"]})")
+
 
     print(f"CREATE TABLE {table_name} ({'%s' % ', '.join(map(str, columns))})")
 
-    mycursor.execute(f"CREATE TABLE {table_name} ({'%s' % ', '.join(map(str, columns))})")
+    mycursor.execute(f"CREATE TABLE IF NOT EXISTS {table_name} ({'%s' % ', '.join(map(str, columns))})")
 
     mydb.commit()
     mydb.close()
@@ -87,6 +101,6 @@ match sys.argv[2]:
     case 'create_schema':
         create_schema(sys.argv[3])
     case 'create_table':
-        create_table(sys.argv[3], sys.argv[4])
+        create_table(sys.argv[3], sys.argv[4], sys.argv[5])
     case 'insert_data':
         insert_data(sys.argv[3], sys.argv[4])

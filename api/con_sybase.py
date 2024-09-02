@@ -4,7 +4,9 @@ import simplejson as json
 
 user = "sa" 
 passwd = "123456"
-host = "192.168.56.101" #Altere para ficar de acordo com sua VM
+# host = "" #Carlos 
+# host = "192.168.1.35" #Luiz Felipe
+host = "25.3.28.238" #Luiz - Hamachi
 db = "master"
 port = "5000"
 driver="Devart ODBC Driver for ASE"
@@ -21,6 +23,8 @@ def write_to_json(results):
     with open(sys.argv[1], "w") as outfile:
         outfile.write(json_result)
 
+    print(json_result)
+
 def convert_rows_to_dict(rows, columns):
     results = []
 
@@ -30,7 +34,7 @@ def convert_rows_to_dict(rows, columns):
     return results
     
 def q_databases():
-    query= f"exec sp_bancos"
+    query= f"EXEC sp_bancos"
     cursor = create_cursor(query)
 
     columns = [column[0] for column in cursor.description]
@@ -41,7 +45,6 @@ def q_databases():
             results.append(dict(zip(columns, row)))
 
     write_to_json(results)
-    print("OK")
 
     conn.close()
 
@@ -54,7 +57,6 @@ def q_list_tables(database):
     results = convert_rows_to_dict(rows, columns)
 
     write_to_json(results)
-    print("OK")
     
     conn.close()
 
@@ -67,7 +69,6 @@ def q_list_columns (database, table):
     results = convert_rows_to_dict(rows, columns)
 
     write_to_json(results)
-    print("OK")
     
     conn.close()
 
@@ -80,7 +81,6 @@ def q_related_tables(database, table):
     results = convert_rows_to_dict(rows, columns)
 
     write_to_json(results)
-    print("OK")
     
     conn.close()
 
@@ -93,7 +93,6 @@ def q_select_all_from_table(database, table):
     results = convert_rows_to_dict(rows, columns)
 
     write_to_json(results)
-    print("OK")
     
     conn.close()
 
