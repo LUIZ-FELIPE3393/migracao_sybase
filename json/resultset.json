@@ -1,1 +1,20 @@
-[]
+[
+    {
+        "name": "bairro"
+    },
+    {
+        "name": "cidade"
+    },
+    {
+        "name": "cliente"
+    },
+    {
+        "name": "estadocivil"
+    },
+    {
+        "name": "funcionario"
+    },
+    {
+        "name": "zona"
+    }
+]

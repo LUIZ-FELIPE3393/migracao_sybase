@@ -34,6 +34,7 @@ def convert_rows_to_dict(rows, columns):
     return results
     
 def create_database(db_name):
+    conn.autocommit = True
     conn.execute("CREATE DATABASE " + db_name)
     conn.close()
 
@@ -45,6 +46,7 @@ def create_table(db_name, table_name, constraints_file):
     constraints = json.load(cnst_file)
 
     cursor = conn.cursor()
+    conn.autocommit = True
 
     columns = []
     primary_keys = []
@@ -58,7 +60,7 @@ def create_table(db_name, table_name, constraints_file):
             case "decimal":
                 column = f"{i["name"]} DOUBLE({i["prec"]}, {i["scale"]})"
             case "char":
-                column = f"{i["name"]} CHAR"
+                column = f"{i["name"]} CHAR({i["length"]})"
             case "date":
                 column = f"{i["name"]} DATE"
             case "varchar":
@@ -70,15 +72,18 @@ def create_table(db_name, table_name, constraints_file):
         if i["pk"] == "YES":
             primary_keys.append(i["name"])
 
-    columns.append(f"PRIMARY KEY ({'%s' % ', '.join(map(str, primary_keys))})")
+    if len(primary_keys) > 0:
+        columns.append(f"PRIMARY KEY ({'%s' % ', '.join(map(str, primary_keys))})")
+
+    print("aaa", len(primary_keys))
 
     for i in constraints:
-        if i["relation"] == "ref":
-            print(f"FOREIGN KEY ({i["fk"]}) REFERENCES {i["ref_table"]}({i["pk"]});")
-            columns.append(f"FOREIGN KEY ({i["fk"]}) REFERENCES {i["ref_table"]}({i["pk"]})")
+        columns.append(f"FOREIGN KEY ({i["fk"]}) REFERENCES {db_name}.dbo.{i["ref_table"]}({i["pk"]})")
 
-    print(f"CREATE TABLE {db_name}.dbo.{table_name} ({'%s' % ', '.join(map(str, columns))})")
-    cursor.execute(f"CREATE TABLE {db_name}.dbo.{table_name} ({'%s' % ', '.join(map(str, columns))})")
+    cursor.execute(f"SELECT * FROM {db_name}.dbo.sysobjects WHERE name = '{table_name}' AND type = 'U'")
+
+    if len(cursor.fetchall()) == 0:
+        cursor.execute(f"CREATE TABLE {db_name}.dbo.{table_name} ({'%s' % ', '.join(map(str, columns))})")
 
     conn.close()
 
@@ -88,13 +93,12 @@ def insert_data(db_name, table_name):
 
     cursor = conn.cursor()
 
-    print(data)
-
     for i in data:
         value_list = list(i.values())
-        print(f"INSERT INTO {db_name}.dbo.{table_name} VALUES ({str(value_list).replace('[', '').replace(']', '').replace('None', 'null')});")
-        cursor.execute(f"INSERT INTO {db_name}.dbo.{table_name} VALUES ({str(value_list).replace('[', '').replace(']', '').replace('None', 'null')});")
+        print(f"INSERT INTO {db_name}.dbo.{table_name} VALUES ({str(value_list).replace('[', '').replace(']', '').replace('None', 'null')})")
+        cursor.execute(f"INSERT INTO {db_name}.dbo.{table_name} VALUES ({str(value_list).replace('[', '').replace(']', '').replace('None', 'null')})")
 
+    conn.commit()
     conn.close()
 
 

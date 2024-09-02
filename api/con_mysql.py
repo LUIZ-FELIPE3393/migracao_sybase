@@ -55,7 +55,7 @@ def create_table( db_name, table_name, constraints_file ):
             case 63 | 108:
                 column = f"{i["name"]} NUMERIC({i["prec"]}, {i["scale"]})"
             case 47:
-                column = f"{i["name"]} CHAR"
+                column = f"{i["name"]} CHAR({i["length"]})"
             case 123 | 49:
                 column = f"{i["name"]} DATE"
             case 39:
@@ -67,7 +67,8 @@ def create_table( db_name, table_name, constraints_file ):
         if i["pk"] == "YES":
             primary_keys.append(i["name"])
 
-    columns.append(f"PRIMARY KEY ({'%s' % ', '.join(map(str, primary_keys))})")
+    if len(primary_keys) > 0:
+        columns.append(f"PRIMARY KEY ({'%s' % ', '.join(map(str, primary_keys))})")
 
     for i in constraints:
         if i["relation"] == "ref":
@@ -98,7 +99,7 @@ def insert_data( db_name, table_name ):
 
     for i in data:
         value_list = list(i.values())
-        mycursor.execute(f"INSERT INTO {table_name} VALUES ({str(value_list).replace('[', '').replace(']', '').replace('None', 'null')});")
+        mycursor.execute(f"INSERT IGNORE INTO {table_name} VALUES ({str(value_list).replace('[', '').replace(']', '').replace('None', 'null')});")
 
     mydb.commit()     
     mydb.close()
