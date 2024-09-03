@@ -112,13 +112,14 @@ def q_databases():
     )
 
     mycursor = mydb.cursor(dictionary=True)
-    mycursor.execute("CALL procedures.listar_bancos")
+    mycursor.callproc("procedures.listar_bancos")
 
-    rows = mycursor.fetchall() 
-    results = []
-    for row in rows:
-        results.append(row)
-
+    for result in mycursor.stored_results():
+        rows = result.fetchall()
+        results = []
+        for row in rows:
+            results.append(row)
+                  
     write_to_json(results)
 
     mydb.close()
@@ -131,12 +132,13 @@ def q_list_tables(database):
     )
 
     mycursor = mydb.cursor(dictionary=True)
-    mycursor.execute(f"CALL procedures.listar_tabelas('{database}')")
+    mycursor.callproc("procedures.listar_tabelas", (database,))
 
-    rows = mycursor.fetchall() 
-    results = []
-    for row in rows:
-        results.append(row)
+    for result in mycursor.stored_results():
+        rows = result.fetchall()
+        results = []
+        for row in rows:
+            results.append(row)
 
     write_to_json(results)
 
@@ -150,12 +152,13 @@ def q_list_columns (database, table):
     )
 
     mycursor = mydb.cursor(dictionary=True)
-    mycursor.execute(f"CALL procedures.listar_colunas('{database}', '{table}')")
+    mycursor.callproc("procedures.listar_colunas", (database, table,))
 
-    rows = mycursor.fetchall() 
-    results = []
-    for row in rows:
-        results.append(row)
+    for result in mycursor.stored_results():
+        rows = result.fetchall()
+        results = []
+        for row in rows:
+            results.append(row)
 
     write_to_json(results)
 
@@ -169,12 +172,13 @@ def q_related_tables(database, table):
     )
 
     mycursor = mydb.cursor(dictionary=True)
-    mycursor.execute(f"CALL procedures.listar_referencias('{database}', '{table}')")
+    mycursor.callproc("procedures.listar_referencias", (database, table,))
 
-    rows = mycursor.fetchall() 
-    results = []
-    for row in rows:
-        results.append(row)
+    for result in mycursor.stored_results():
+        rows = result.fetchall()
+        results = []
+        for row in rows:
+            results.append(row)
 
     write_to_json(results)
 

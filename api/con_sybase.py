@@ -9,6 +9,8 @@ db = "master"
 port = "5000"
 driver="Devart ODBC Driver for ASE"
 conn = pyodbc.connect(driver=driver, server=host, database=db, port = port, uid=user, pwd=passwd)
+#conn.autocommit = True
+#conn.execute('DROP DATABASE world')
 
 def create_cursor(query): 
     cursor = conn.cursor()
@@ -55,8 +57,10 @@ def create_table(db_name, table_name, constraints_file):
         match (i["type"]):
             case "int":
                 column = f"{i["name"]} INT"
-            case "decimal":
-                column = f"{i["name"]} DOUBLE({i["prec"]}, {i["scale"]})"
+            case "smallint":
+                column = f"{i["name"]} INT"
+            case "decimal" | "double":
+                column = f"{i["name"]} DECIMAL({i["prec"]}, {i["scale"]})"
             case "char":
                 column = f"{i["name"]} CHAR({i["length"]})"
             case "date":
@@ -66,21 +70,22 @@ def create_table(db_name, table_name, constraints_file):
             case _:
                 column = f"{i["name"]} VARCHAR(64)"
 
-        columns.append(column)   
         if i["pk"] == "YES":
             primary_keys.append(i["name"])
+        else:
+            column = column + " NULL"
+        columns.append(column) 
 
     if len(primary_keys) > 0:
         columns.append(f"PRIMARY KEY ({'%s' % ', '.join(map(str, primary_keys))})")
 
-    print("aaa", len(primary_keys))
-
     for i in constraints:
-        columns.append(f"FOREIGN KEY ({i["fk"]}) REFERENCES {db_name}.dbo.{i["ref_table"]}({i["pk"]})")
+        columns.append(f"FOREIGN KEY ({i["pk"]}) REFERENCES {db_name}.dbo.{i["ref_table"]}({i["fk"]})")
 
     cursor.execute(f"SELECT * FROM {db_name}.dbo.sysobjects WHERE name = '{table_name}' AND type = 'U'")
 
     if len(cursor.fetchall()) == 0:
+        print(f"CREATE TABLE {db_name}.dbo.{table_name} ({'%s' % ', '.join(map(str, columns))})")
         cursor.execute(f"CREATE TABLE {db_name}.dbo.{table_name} ({'%s' % ', '.join(map(str, columns))})")
 
     conn.close()

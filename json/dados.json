@@ -1,18 +1,1 @@
-[
-    {
-        "codigo_especialidade": 1,
-        "descricao_especialidade": "Cardiologia"
-    },
-    {
-        "codigo_especialidade": 2,
-        "descricao_especialidade": "Cardiologia"
-    },
-    {
-        "codigo_especialidade": 3,
-        "descricao_especialidade": "Cancerologia"
-    },
-    {
-        "codigo_especialidade": 4,
-        "descricao_especialidade": "Cirurgia Geral"
-    }
-]
+[]

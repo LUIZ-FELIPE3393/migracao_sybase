@@ -9,23 +9,43 @@ sybaseForm.addEventListener("submit", (event) => {
     const user = sybaseForm.querySelector("#idPorta").value;
     const password = sybaseForm.querySelector("#idSenha").value;
 
+    const dados = sybaseForm.querySelector("#check2");
+
     console.log(server, port, user, password);
 
     sybaseForm.querySelector("button[type='submit']").setAttribute("disabled", "");
-    fetch('/migrar/sybase/dados', {
-        method: "POST", 
-        headers: {
-            'Content-Type': 'application/json',
-            'sybase-server': server,
-            'sybase-port': port, 
-            'sybase-user': user, 
-            'sybase-password': password
-        },
-        body: JSON.stringify(tablesInMigrationSybase)})
-        .then(response => {
-            console.log(response);
-            sybaseForm.querySelector("button[type='submit']").removeAttribute("disabled");
-        })
+    if (dados.checked === true) {
+        fetch('/migrar/sybase/dados', {
+            method: "POST", 
+            headers: {
+                'Content-Type': 'application/json',
+                'sybase-server': server,
+                'sybase-port': port, 
+                'sybase-user': user, 
+                'sybase-password': password
+            },
+            body: JSON.stringify(tablesInMigrationSybase)})
+            .then(response => {
+                console.log(response);
+                sybaseForm.querySelector("button[type='submit']").removeAttribute("disabled");
+            })
+    } else {
+        fetch('/migrar/sybase', {
+            method: "POST", 
+            headers: {
+                'Content-Type': 'application/json',
+                'sybase-server': server,
+                'sybase-port': port, 
+                'sybase-user': user, 
+                'sybase-password': password
+            },
+            body: JSON.stringify(tablesInMigrationSybase)})
+            .then(response => {
+                console.log(response);
+                sybaseForm.querySelector("button[type='submit']").removeAttribute("disabled");
+            })
+    }
+    
 })
 
 function unblockAllTablesSybase(database) {

@@ -12,12 +12,14 @@ CREATE TABLE estadocivil (
   estdescricao varchar(40) NOT NULL,
   PRIMARY KEY (estcodigo)
 );
+sp_primarykey @tabname = 'estadocivil', @col1 = 'estcodigo';
 
 CREATE TABLE cidade (
   cidcodigo int DEFAULT 0,
   cidnome varchar(80) NOT NULL,
   PRIMARY KEY (cidcodigo)
 );
+sp_primarykey @tabname = 'cidade', @col1 = 'cidcodigo';
 
 CREATE TABLE zona (
   zoncodigo int DEFAULT 0,
@@ -25,6 +27,8 @@ CREATE TABLE zona (
   zoncidcodigo int NOT NULL REFERENCES cidade (cidcodigo),
   PRIMARY KEY (zoncodigo),
 );
+sp_primarykey @tabname = 'zona', @col1 = 'zoncodigo';
+sp_foreignkey zona, cidade, zoncidcodigo;
 
 CREATE TABLE bairro (
   baicodigo int DEFAULT 0,
@@ -33,6 +37,8 @@ CREATE TABLE bairro (
   baiqtdepessoas unsigned int DEFAULT 0,
   PRIMARY KEY (baicodigo)
 );
+sp_primarykey @tabname = 'bairro', @col1 = 'baicodigo';
+sp_foreignkey bairro, zona, baizoncodigo;
 
 CREATE TABLE fornecedor (
   forcnpj char(18) DEFAULT '',
@@ -41,12 +47,16 @@ CREATE TABLE fornecedor (
   forcidcodigo int NOT NULL REFERENCES cidade (cidcodigo),
   PRIMARY KEY (forcnpj)
 );
+sp_primarykey @tabname = 'fornecedor', @col1 = 'forcnpj';
+sp_foreignkey fornecedor, cidade, forcidcodigo;
 
 CREATE TABLE fornecedorfone (
   ffforcnpj char(18) NOT NULL REFERENCES fornecedor (forcnpj),
   fffone char(9) NOT NULL,
   PRIMARY KEY (ffforcnpj,fffone)
 );
+sp_primarykey @tabname = 'fornecedorfone', @col1 = 'ffforcnpj', @col2 = 'fffone';
+sp_foreignkey fornecedorfone, fornecedor, ffforcnpj;
 
 CREATE TABLE funcionario (
   funcodigo int DEFAULT 0,
@@ -60,6 +70,10 @@ CREATE TABLE funcionario (
   funlogin varchar(30) NULL,
   PRIMARY KEY (funcodigo)
 );
+sp_primarykey @tabname = 'funcionario', @col1 = 'funcodigo';
+sp_foreignkey funcionario, bairro, funbaicodigo;
+sp_foreignkey funcionario, funcionario, funcodgerente;
+sp_foreignkey funcionario, estadocivil, funestcodigo;
 
 CREATE TABLE filial (
   filcodigo int DEFAULT 0,
@@ -68,6 +82,9 @@ CREATE TABLE filial (
   filbaicodigo int NOT NULL REFERENCES bairro (baicodigo),
   PRIMARY KEY (filcodigo),
 );
+sp_primarykey @tabname = 'filial', @col1 = 'filcodigo';
+sp_foreignkey filial, funcionario, filcodgerente;
+sp_foreignkey filial, bairro, filbaicodigo;
 
 CREATE TABLE grupoproduto (
   grpcodigo int NOT NULL,
@@ -76,6 +93,7 @@ CREATE TABLE grupoproduto (
   grpativo char(1) NOT NULL,
   PRIMARY KEY (grpcodigo)
 );
+sp_primarykey @tabname = 'grupoproduto', @col1 = 'grpcodigo';
 
 CREATE TABLE produto (
   procodigo int DEFAULT 0,
@@ -88,6 +106,10 @@ CREATE TABLE produto (
   proforcnpj char(18) NOT NULL REFERENCES fornecedor (forcnpj),
   PRIMARY KEY (procodigo)
 );
+sp_primarykey @tabname = 'produto', @col1 = 'procodigo';
+sp_foreignkey produto, grupoproduto, progrpcodigo;
+sp_foreignkey produto, fornecedor, proforcnpj;
+
 
 CREATE TABLE cliente (
   clicodigo int IDENTITY,
@@ -101,6 +123,9 @@ CREATE TABLE cliente (
   clidtdesativacao date NULL,
   PRIMARY KEY (clicodigo),
 );
+sp_primarykey @tabname = 'cliente', @col1 = 'clicodigo';
+sp_foreignkey cliente, bairro, clibaicodigo;
+sp_foreignkey cliente, estadocivil, cliestcodigo;
 
 CREATE TABLE clientestatus (
     csclicodigo INT NOT NULL,
@@ -108,6 +133,8 @@ CREATE TABLE clientestatus (
     PRIMARY KEY (csclicodigo),
     FOREIGN KEY (csclicodigo) REFERENCES cliente (clicodigo)
 );
+sp_primarykey @tabname = 'clientestatus', @col1 = 'csclicodigo';
+sp_foreignkey clientestatus, cliente, csclicodigo;
 
 CREATE TABLE venda (
   vencodigo int NOT NULL,
@@ -117,6 +144,10 @@ CREATE TABLE venda (
   venfuncodigo int NOT NULL REFERENCES funcionario (funcodigo),
   PRIMARY KEY (vencodigo)
 );
+sp_primarykey @tabname = 'venda', @col1 = 'vencodigo';
+sp_foreignkey venda, filial, venfilcodigo;
+sp_foreignkey venda, cliente, venclicodigo;
+sp_foreignkey venda, funcionario, venfuncodigo;
 
 CREATE TABLE itemvenda (
   itvvencodigo int NOT NULL REFERENCES venda (vencodigo),
@@ -124,6 +155,9 @@ CREATE TABLE itemvenda (
   itvqtde int NOT NULL,
   PRIMARY KEY (itvvencodigo,itvprocodigo),
 );
+sp_primarykey @tabname = 'itemvenda', @col1 = 'itvvencodigo', @col2 = 'itvprocodigo';
+sp_foreignkey itemvenda, venda, itvvencodigo;
+sp_foreignkey itemvenda, produto, itvprocodigo;
 
 --  Inserts de cidade
 INSERT INTO cidade VALUES (1,'Manaus');
@@ -132,7 +166,7 @@ INSERT INTO cidade VALUES (3,'Porto Velho');
 INSERT INTO cidade VALUES (4,'Rio Branco');
 INSERT INTO cidade VALUES (5,'Belo Horizonte');
 INSERT INTO cidade VALUES (6,'Rio de Janeiro');
-INSERT INTO cidade VALUES (7,'S�o Paulo');
+INSERT INTO cidade VALUES (7,'São Paulo');
 INSERT INTO cidade VALUES (8,'Fortaleza');
 INSERT INTO cidade VALUES (9,'Limoeiro do Norte');
 INSERT INTO cidade VALUES (10,'Santos'); 

@@ -97,6 +97,7 @@ function inserirTabelaSybase(banco, table, dados) {
     }
 
     pyPrc = spawnSync('python', [PATH_SYBASE_API, './json/columns.json', 'create_table', banco, table, './json/constraints.json']);
+    console.log(pyPrc.stdout?.toString()?.trim());
     error = pyPrc.stderr?.toString()?.trim();
     if (error) {
         console.error(error);

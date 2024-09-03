@@ -8,24 +8,42 @@ mysqlForm.addEventListener("submit", (event) => {
     const user = mysqlForm.querySelector("#idPorta").value;
     const password = mysqlForm.querySelector("#idSenha").value;
 
+    const dados = mysqlForm.querySelector("#check9");
+
     console.log(server, port, user, password);
 
     mysqlForm.querySelector("button[type='submit']").setAttribute("disabled", "");
-    fetch('/migrar/mysql/dados', {
-        method: "POST", 
-        headers: {
-            'Content-Type': 'application/json',
-            'mysql-server': server,
-            'mysql-port': port, 
-            'mysql-user': user, 
-            'mysql-password': password
-        },
-        body: JSON.stringify(tablesInMigrationSybase)})
-        .then(response => {
-            console.log(response);
-            document.querySelector("#console").textContent = response.status + " : " + response.statusText;
-            mysqlForm.querySelector("button[type='submit']").removeAttribute("disabled");
-        })
+    if (dados.checked === true) {
+        fetch('/migrar/mysql/dados', {
+            method: "POST", 
+            headers: {
+                'Content-Type': 'application/json',
+                'sybase-server': server,
+                'sybase-port': port, 
+                'sybase-user': user, 
+                'sybase-password': password
+            },
+            body: JSON.stringify(tablesInMigrationSybase)})
+            .then(response => {
+                console.log(response);
+                mysqlForm.querySelector("button[type='submit']").removeAttribute("disabled");
+            })
+    } else {
+        fetch('/migrar/mysql', {
+            method: "POST", 
+            headers: {
+                'Content-Type': 'application/json',
+                'sybase-server': server,
+                'sybase-port': port, 
+                'sybase-user': user, 
+                'sybase-password': password
+            },
+            body: JSON.stringify(tablesInMigrationSybase)})
+            .then(response => {
+                console.log(response);
+                mysqlForm.querySelector("button[type='submit']").removeAttribute("disabled");
+            })
+    }
 })
 
 function unblockAllTablesMysql(database) {

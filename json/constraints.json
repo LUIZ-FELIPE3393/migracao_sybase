@@ -1,21 +1,7 @@
 [
     {
-        "ref_table": "bairro",
-        "relation": "ref",
-        "fk": "funbaicodigo",
-        "pk": "baicodigo"
-    },
-    {
-        "ref_table": "funcionario",
-        "relation": "ref",
-        "fk": "funcodgerente",
-        "pk": "funcodigo"
-    },
-    {
-        "ref_table": "estadocivil",
-        "relation": "ref",
-        "fk": "funestcodigo",
-        "pk": "estcodigo"
+        "ref_table": "especialidades",
+        "pk": "codigo_especialidade",
+        "fk": "codigo_especialidade"
     }
 ]
-[]

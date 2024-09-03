@@ -1,5 +1,3 @@
-DROP SCHEMA bd2024;
-
 DROP SCHEMA procedures;
 
 CREATE SCHEMA procedures;
